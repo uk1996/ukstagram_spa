@@ -1,7 +1,13 @@
-import "./App.scss";
+import React from 'react';
+import './App.scss';
+import PostList from './PostList';
 
 function App() {
-  return <div>최성욱</div>;
+    return (
+        <div>
+            <PostList />
+        </div>
+    );
 }
 
 export default App;
