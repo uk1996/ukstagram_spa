@@ -1,89 +1,133 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import { Alert } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { Form, Input, Button, Checkbox, notification } from 'antd';
+import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
 
 const apiUrl = 'http://localhost:8000/accounts/signup/';
 
 const Signup = () => {
     const history = useHistory();
 
-    const [inputs, setInputs] = useState({ username: '', password: '' });
-    const [errors, setErrors] = useState({});
-    const [formDisabled, setFromDisabled] = useState(true);
-    const [loading, setLoading] = useState(false);
+    const [fieldErrors, setFieldErrors] = useState({});
 
-    const onSubmit = (e) => {
-        e.preventDefault();
+    const onFinish = (values) => {
+        const { username, password } = values;
 
-        setErrors({});
-        setLoading(true);
+        setFieldErrors({});
 
-        Axios.post(apiUrl, inputs)
+        const data = { username, password };
+        Axios.post(apiUrl, data)
             .then((response) => {
+                notification.open({
+                    message: '회원가입 성공',
+                    description: '로그인 페이지로 이동합니다.',
+                    icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+                });
                 history.push('/accounts/login/');
             })
             .catch((error) => {
                 if (error.response) {
-                    setErrors({
-                        username: (error.response.data.username || []).join(
-                            ' ',
-                        ),
-                        password: (error.response.data.password || []).join(
-                            ' ',
-                        ),
+                    notification.open({
+                        message: '회원가입 실패',
+                        description: '아이디/암호를 확인해주세요.',
+                        icon: <FrownOutlined style={{ color: '#ff3333' }} />,
                     });
+
+                    const { data: fieldsErrorMessage } = error.response;
+
+                    setFieldErrors(
+                        Object.entries(fieldsErrorMessage).reduce(
+                            (acc, [fieldName, errors]) => {
+                                // errors : ["m1", "m2"]
+                                acc[fieldName] = {
+                                    validateStatus: 'error',
+                                    help: errors.join(' '),
+                                };
+                                return acc;
+                            },
+                            {}, // 초기값
+                        ),
+                    );
                 }
             })
-            .finally(() => {
-                setLoading(false);
-            });
+            .finally(() => {});
+
+        console.log('Success:', values);
     };
 
-    useEffect(() => {
-        const Enabled = Object.values(inputs).every((s) => s.length > 0);
-        setFromDisabled(!Enabled);
-    }, [inputs]);
-
-    const onChange = (e) => {
-        const { name, value } = e.target;
-        setInputs((prevState) => {
-            return {
-                ...prevState,
-                [name]: value,
-            };
-        });
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
     };
 
     return (
-        <div>
-            <form onSubmit={onSubmit}>
-                <div>
-                    <input type="text" name="username" onChange={onChange} />
-                    {errors.username && (
-                        <Alert type="error" message={errors.username} />
-                    )}
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        name="password"
-                        onChange={onChange}
-                    />
-                    {errors.password && (
-                        <Alert type="error" message={errors.password} />
-                    )}
-                </div>
-                <div>
-                    <input
-                        type="submit"
-                        value="회원가입"
-                        disabled={loading || formDisabled}
-                    />
-                    {loading && '로딩중'}
-                </div>
-            </form>
-        </div>
+        <Form
+            name="basic"
+            labelCol={{
+                span: 8,
+            }}
+            wrapperCol={{
+                span: 16,
+            }}
+            initialValues={{
+                remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+        >
+            <Form.Item
+                label="Username"
+                name="username"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your username!',
+                    },
+                ]}
+                hasFeedback
+                {...fieldErrors.username}
+            >
+                <Input name="username" />
+            </Form.Item>
+            <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password!',
+                    },
+                    {
+                        min: 8,
+                        message: '8자리 이상을 입력하세요.',
+                    },
+                ]}
+                {...fieldErrors.password}
+            >
+                <Input.Password name="password" />
+            </Form.Item>
+            <Form.Item
+                name="remember"
+                valuePropName="checked"
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}
+            >
+                <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+            <Form.Item
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}
+            >
+                <Button type="primary" htmlType="submit">
+                    회원가입
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 
