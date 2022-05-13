@@ -3,17 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { Card, Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
 import Axios from 'axios';
-import useLocalStorage from '../../utils/useLocalStorage';
+// import useLocalStorage from '../../utils/useLocalStorage';
+import { useAppContext, setToken } from '../../store';
 
 const apiUrl = 'http://localhost:8000/accounts/api-jwt-auth/';
 
 const Login = () => {
+    const { dispatch } = useAppContext();
     const history = useHistory();
-
-    const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', '');
+    // const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', '');
     const [fieldErrors, setFieldErrors] = useState({});
-
-    console.log('loaded jwtToken: ', jwtToken);
 
     const onFinish = (values) => {
         const { username, password } = values;
@@ -31,7 +30,8 @@ const Login = () => {
                 const {
                     data: { token },
                 } = response;
-                setJwtToken(token);
+                dispatch(setToken(token));
+
                 history.push('/');
             })
             .catch((error) => {
