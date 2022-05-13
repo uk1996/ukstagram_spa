@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Card, Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
 import Axios from 'axios';
@@ -9,10 +9,33 @@ import { useAppContext, setToken } from '../../store';
 const apiUrl = 'http://localhost:8000/accounts/api-jwt-auth/';
 
 const Login = () => {
-    const { dispatch } = useAppContext();
+    const {
+        store: { isAuthenticated },
+        dispatch,
+    } = useAppContext();
     const history = useHistory();
     // const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', '');
     const [fieldErrors, setFieldErrors] = useState({});
+    const location = useLocation();
+
+    const {
+        from: { pathname: loginRedirectUrl },
+    } = location.state || { from: { pathname: '/' } };
+
+    console.log(isAuthenticated);
+    if (isAuthenticated) {
+        return (
+            <div>
+                <Redirect
+                    to={{
+                        pathname: '/accounts/profile/',
+                        state: { from: '/accounts/login/' },
+                    }}
+                />
+                ;
+            </div>
+        );
+    }
 
     const onFinish = (values) => {
         const { username, password } = values;
@@ -24,7 +47,6 @@ const Login = () => {
             .then((response) => {
                 notification.open({
                     message: '로그인 성공',
-                    description: '메인 페이지로 이동합니다.',
                     icon: <SmileOutlined style={{ color: '#108ee9' }} />,
                 });
                 const {
@@ -32,7 +54,7 @@ const Login = () => {
                 } = response;
                 dispatch(setToken(token));
 
-                history.push('/');
+                history.push(loginRedirectUrl);
             })
             .catch((error) => {
                 if (error.response) {
