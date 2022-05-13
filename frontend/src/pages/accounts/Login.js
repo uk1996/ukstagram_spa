@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Card, Form, Input, Button, notification } from 'antd';
-import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
+import { FrownOutlined } from '@ant-design/icons';
 import Axios from 'axios';
 // import useLocalStorage from '../../utils/useLocalStorage';
 import { useAppContext, setToken } from '../../store';
@@ -44,10 +44,10 @@ const Login = () => {
         const data = { username, password };
         Axios.post(apiUrl, data)
             .then((response) => {
-                notification.open({
-                    message: '로그인 성공',
-                    icon: <SmileOutlined style={{ color: '#108ee9' }} />,
-                });
+                // notification.open({
+                //     message: '로그인 성공',
+                //     icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+                // });
                 const {
                     data: { token },
                 } = response;
