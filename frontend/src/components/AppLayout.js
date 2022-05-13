@@ -4,6 +4,7 @@ import { Input, Menu } from 'antd';
 import StoryList from './StoryList';
 import SuggestionList from './SuggestionList';
 import UkstagramImage from '../assets/Ukstagram.png';
+import Logout from '../pages/accounts/Logout';
 
 const AppLayout = ({ children }) => {
     return (
@@ -17,9 +18,9 @@ const AppLayout = ({ children }) => {
                 </div>
                 <div className="topnav">
                     <Menu mode="horizontal">
-                        <Menu.Item>menu 1</Menu.Item>
-                        <Menu.Item>menu 2</Menu.Item>
-                        <Menu.Item>menu 3</Menu.Item>
+                        <Menu.Item>
+                            <Logout />
+                        </Menu.Item>
                     </Menu>
                 </div>
             </div>

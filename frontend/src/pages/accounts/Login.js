@@ -22,7 +22,6 @@ const Login = () => {
         from: { pathname: loginRedirectUrl },
     } = location.state || { from: { pathname: '/' } };
 
-    console.log(isAuthenticated);
     if (isAuthenticated) {
         return (
             <div>
