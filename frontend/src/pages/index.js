@@ -4,6 +4,7 @@ import AppLayout from '../components/AppLayout';
 import Home from './Home';
 import About from './About';
 import AccountRoutes from './accounts';
+
 const Root = () => {
     return (
         <AppLayout>

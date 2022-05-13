@@ -14,7 +14,6 @@ const PostList = () => {
                 setPostList(data);
             })
             .catch((error) => {});
-        console.log('mounted');
     }, []);
 
     return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { Form, Input, Button, notification } from 'antd';
+import { Card, Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
 
 const apiUrl = 'http://localhost:8000/accounts/signup/';
@@ -61,63 +61,65 @@ const Signup = () => {
     };
 
     return (
-        <Form
-            name="basic"
-            labelCol={{
-                span: 8,
-            }}
-            wrapperCol={{
-                span: 16,
-            }}
-            initialValues={{
-                remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-        >
-            <Form.Item
-                label="Username"
-                name="username"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input your username!',
-                    },
-                ]}
-                hasFeedback
-                {...fieldErrors.username}
-            >
-                <Input name="username" />
-            </Form.Item>
-            <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input your password!',
-                    },
-                    {
-                        min: 8,
-                        message: '8자리 이상을 입력하세요.',
-                    },
-                ]}
-                {...fieldErrors.password}
-            >
-                <Input.Password name="password" />
-            </Form.Item>
-            <Form.Item
+        <Card title="회원가입">
+            <Form
+                name="basic"
+                labelCol={{
+                    span: 8,
+                }}
                 wrapperCol={{
-                    offset: 8,
                     span: 16,
                 }}
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
             >
-                <Button type="primary" htmlType="submit">
-                    회원가입
-                </Button>
-            </Form.Item>
-        </Form>
+                <Form.Item
+                    label="Username"
+                    name="username"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your username!',
+                        },
+                    ]}
+                    hasFeedback
+                    {...fieldErrors.username}
+                >
+                    <Input name="username" />
+                </Form.Item>
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your password!',
+                        },
+                        {
+                            min: 8,
+                            message: '8자리 이상을 입력하세요.',
+                        },
+                    ]}
+                    {...fieldErrors.password}
+                >
+                    <Input.Password name="password" />
+                </Form.Item>
+                <Form.Item
+                    wrapperCol={{
+                        offset: 8,
+                        span: 16,
+                    }}
+                >
+                    <Button type="primary" htmlType="submit">
+                        회원가입
+                    </Button>
+                </Form.Item>
+            </Form>
+        </Card>
     );
 };
 
