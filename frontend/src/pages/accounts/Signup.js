@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { Form, Input, Button, Checkbox, notification } from 'antd';
+import { Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
 
 const apiUrl = 'http://localhost:8000/accounts/signup/';
@@ -106,16 +106,6 @@ const Signup = () => {
                 {...fieldErrors.password}
             >
                 <Input.Password name="password" />
-            </Form.Item>
-            <Form.Item
-                name="remember"
-                valuePropName="checked"
-                wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                }}
-            >
-                <Checkbox>Remember me</Checkbox>
             </Form.Item>
             <Form.Item
                 wrapperCol={{
