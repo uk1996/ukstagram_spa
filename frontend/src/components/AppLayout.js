@@ -5,8 +5,13 @@ import StoryList from './StoryList';
 import SuggestionList from './SuggestionList';
 import UkstagramImage from '../assets/Ukstagram.png';
 import Logout from '../pages/accounts/Logout';
+import { useAppContext } from '../store';
 
 const AppLayout = ({ children }) => {
+    const {
+        store: { isAuthenticated },
+    } = useAppContext();
+
     return (
         <div className="app">
             <div className="header">
@@ -25,10 +30,12 @@ const AppLayout = ({ children }) => {
                 </div>
             </div>
             <div className="contents">{children}</div>
-            <div className="sidebar">
-                <StoryList style={{ marginBottom: '1rem' }} />
-                <SuggestionList />
-            </div>
+            {isAuthenticated && (
+                <div className="sidebar">
+                    <StoryList style={{ marginBottom: '1rem' }} />
+                    <SuggestionList />
+                </div>
+            )}
             <div className="footer">@Ukstagram</div>
         </div>
     );
