@@ -21,7 +21,7 @@ const PostList = () => {
                 setPostList(data);
             })
             .catch((error) => {});
-    }, []);
+    }, [jwtToken]);
 
     return (
         <div>
