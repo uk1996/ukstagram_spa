@@ -2,10 +2,10 @@
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-areas:
-        'header header header'
-        'contents contents sidebar'
-        'footer footer footer';
+    // grid-template-areas:
+    //     'header header header'
+    //     'contents contents sidebar'
+    //     'footer footer footer';
 
     width: 80%;
     min-width: 500px;
