@@ -5,8 +5,7 @@ import { FrownOutlined } from '@ant-design/icons';
 import Axios from 'axios';
 // import useLocalStorage from '../../utils/useLocalStorage';
 import { useAppContext, setToken } from '../../store';
-
-const apiUrl = 'http://localhost:8000/accounts/api-jwt-auth/';
+import { useUrlContext } from '../../utils/UrlProvider';
 
 const Login = () => {
     const {
@@ -17,6 +16,8 @@ const Login = () => {
     // const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', '');
     const [fieldErrors, setFieldErrors] = useState({});
     const location = useLocation();
+
+    const apiUrl = useUrlContext().defaulturl + '/accounts/api-jwt-auth/';
 
     const {
         from: { pathname: loginRedirectUrl },

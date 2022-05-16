@@ -5,12 +5,15 @@ import 'antd/dist/antd.min.css';
 import './index.css';
 import Root from './pages';
 import { AppProvider } from './store';
+import UrlProvider from './utils/UrlProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
         <AppProvider>
-            <Root />
+            <UrlProvider>
+                <Root />
+            </UrlProvider>
         </AppProvider>
     </BrowserRouter>,
 );

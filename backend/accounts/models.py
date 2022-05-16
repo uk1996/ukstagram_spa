@@ -24,7 +24,7 @@ class User(AbstractUser):
 
     @property  # method를 field인것 처럼 사용
     def name(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}".strip()
 
     @property
     def avatar_url(self):

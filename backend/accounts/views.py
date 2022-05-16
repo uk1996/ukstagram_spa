@@ -1,7 +1,7 @@
-from django.shortcuts import render
 from rest_framework import permissions
-from rest_framework.generics import CreateAPIView
-from .serializers import SignupSerializer
+from rest_framework.generics import CreateAPIView, ListAPIView
+from .serializers import SignupSerializer, SuggestionSerializer
+from django.contrib.auth import get_user_model
 
 
 class Signup(CreateAPIView):
@@ -11,4 +11,14 @@ class Signup(CreateAPIView):
     ]
 
 
-signup = Signup.as_view()
+User = get_user_model()
+
+
+class SuggestionAPIView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = SuggestionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        qs = super().get_queryset().exclude(username=self.request.user)
+        return qs[:5]

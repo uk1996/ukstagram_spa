@@ -1,15 +1,17 @@
 import React from 'react';
-import { UserOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Avatar } from 'antd';
 import './Suggestion.scss';
+import { useUrlContext } from '../utils/UrlProvider';
 
-const Suggestion = () => {
+const Suggestion = ({ username, avatar_url }) => {
+    const imgUrl = useUrlContext().defaulturl + avatar_url;
+
     return (
         <div className="suggestion">
             <div className="avatar">
-                <UserOutlined />
+                <Avatar size="small" icon={<img src={imgUrl} alt="" />} />
             </div>
-            <div className="username">Username</div>
+            <div className="username">{username}</div>
             <div className="action">
                 <Button size="small">Follow</Button>
             </div>

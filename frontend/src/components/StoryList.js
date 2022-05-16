@@ -6,7 +6,9 @@ const StoryList = ({ style }) => {
     return (
         <div style={style}>
             <Card title="Stoires" size="small">
-                Stories from people you follow will show up here.
+                <span style={{ opacity: '0.5' }}>
+                    Stories from people you follow will show up here.
+                </span>
             </Card>
         </div>
     );

@@ -3,13 +3,14 @@ import Axios from 'axios';
 import Post from './Post';
 import { useAppContext } from '../store';
 import { Alert } from 'antd';
-
-const apiUrl = 'http://localhost:8000/api/posts/';
+import { useUrlContext } from '../utils/UrlProvider';
 
 const PostList = () => {
     const {
         store: { jwtToken },
     } = useAppContext();
+
+    const apiUrl = useUrlContext().defaulturl + '/api/posts/';
 
     const [postList, setPostList] = useState([]);
 
@@ -21,7 +22,7 @@ const PostList = () => {
                 setPostList(data);
             })
             .catch((error) => {});
-    }, [jwtToken]);
+    }, [jwtToken, apiUrl]);
 
     return (
         <div>

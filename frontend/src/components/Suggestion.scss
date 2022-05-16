@@ -5,11 +5,13 @@
     margin-bottom: 0.5em;
 
     .avatar {
-        justify-self: center;
+        justify-self: left;
+        margin-right: 1em;
     }
 
-    // .username {
-    // }
+    .username {
+        justify-self: left;
+    }
 
     .action {
         justify-self: right;

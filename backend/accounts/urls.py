@@ -9,8 +9,11 @@ from rest_framework_jwt.views import (
 app_name = "accounts"
 
 urlpatterns = [
-    path("signup/", views.signup, name="signup"),
+    path("signup/", views.Signup.as_view(), name="signup"),
     path("api-jwt-auth/", obtain_jwt_token),
     path("api-jwt-auth/refresh/", refresh_jwt_token),
     path("api-jwt-auth/verify/", verify_jwt_token),
+    path(
+        "suggestions/", views.SuggestionAPIView.as_view(), name="suggestion_user_list"
+    ),
 ]
