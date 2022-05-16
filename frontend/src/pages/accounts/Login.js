@@ -82,7 +82,6 @@ const Login = () => {
                 }
             })
             .finally(() => {});
-        console.log('Success:', values);
     };
 
     const onFinishFailed = (errorInfo) => {
