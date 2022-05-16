@@ -12,7 +12,7 @@ const PostList = () => {
 
     const apiUrl = useUrlContext().defaulturl + '/api/posts/';
 
-    const [postList, setPostList] = useState([]);
+    const [postList, setPostList] = useState();
 
     useEffect(() => {
         const headers = { Authorization: `Bearer ${jwtToken}` };
@@ -26,12 +26,13 @@ const PostList = () => {
 
     return (
         <div>
-            {postList.length === 0 && (
+            {postList && postList.length === 0 && (
                 <Alert type="warning" message="포스팅이 없습니다." />
             )}
-            {postList.map((post) => {
-                return <Post post={post} key={post.id} />;
-            })}
+            {postList &&
+                postList.map((post) => {
+                    return <Post post={post} key={post.id} />;
+                })}
         </div>
     );
 };
