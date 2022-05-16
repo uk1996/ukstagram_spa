@@ -6,6 +6,7 @@ import SuggestionList from './SuggestionList';
 import UkstagramImage from '../assets/Ukstagram.png';
 import Logout from '../pages/accounts/Logout';
 import { useAppContext } from '../store';
+import { Link } from 'react-router-dom';
 
 const AppLayout = ({ children }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -37,7 +38,11 @@ const AppLayout = ({ children }) => {
         <div className="app" style={appStyle}>
             <div className="header">
                 <h1 className="page-title">
-                    <img src={UkstagramImage} alt="ukstagram" />
+                    <>
+                        <Link to="/">
+                            <img src={UkstagramImage} alt="ukstagram" />
+                        </Link>
+                    </>
                 </h1>
                 <div className="search">
                     <Input.Search />
