@@ -116,7 +116,7 @@ const Login = () => {
                     ]}
                     hasFeedback
                     {...fieldErrors.username}
-                    {...fieldErrors.non_field_errors}
+                    {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
                 >
                     <Input name="username" />
                 </Form.Item>
