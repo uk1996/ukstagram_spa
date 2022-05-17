@@ -47,11 +47,13 @@ const AppLayout = ({ children }) => {
                     <Input.Search />
                 </div>
                 <div className="topnav">
-                    <Menu mode="horizontal">
-                        <Menu.Item>
-                            <Logout />
-                        </Menu.Item>
-                    </Menu>
+                    {isAuthenticated && (
+                        <Menu mode="horizontal">
+                            <Menu.Item>
+                                <Logout />
+                            </Menu.Item>
+                        </Menu>
+                    )}
                 </div>
             </div>
             <div className="contents" style={contentStyle}>
