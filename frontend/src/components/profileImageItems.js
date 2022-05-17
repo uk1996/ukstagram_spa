@@ -13,5 +13,5 @@ function getItem(label, key, icon, children, type) {
 }
 
 export const profileImageItems = [
-    getItem(null, 'sub1', <MyImage />, [getItem(null, 'Logout', <Logout />)]),
+    getItem(null, 'sub1', <MyImage size={30}/>, [getItem(null, 'Logout', <Logout />)]),
 ];

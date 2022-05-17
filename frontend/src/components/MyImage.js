@@ -4,7 +4,7 @@ import { useUrlContext } from '../utils/UrlProvider';
 import { useAppContext } from '../store';
 import { Avatar } from 'antd';
 
-const MyImage = () => {
+const MyImage = ({size}) => {
     const [avatarUrl, setAvatarUrl] = useState();
     const apiUrl = useUrlContext().defaulturl + '/accounts/users/me/';
     const {
@@ -24,7 +24,7 @@ const MyImage = () => {
 
     return (
         <Avatar
-            size={32}
+            size={size}
             icon={<img src={useUrlContext().defaulturl + avatarUrl} alt="my" />}
         />
     );
