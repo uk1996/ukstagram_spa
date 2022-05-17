@@ -6,6 +6,7 @@ import Axios from 'axios';
 // import useLocalStorage from '../../utils/useLocalStorage';
 import { useAppContext, setToken } from '../../store';
 import { useUrlContext } from '../../utils/UrlProvider';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const {
@@ -89,66 +90,73 @@ const Login = () => {
     };
 
     return (
-        <Card title="로그인">
-            <Form
-                name="basic"
-                labelCol={{
-                    span: 8,
-                }}
-                wrapperCol={{
-                    span: 16,
-                }}
-                initialValues={{
-                    remember: true,
-                }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-            >
-                <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                    hasFeedback
-                    {...fieldErrors.username}
-                    {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
-                >
-                    <Input name="username" />
-                </Form.Item>
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                        {
-                            min: 8,
-                            message: '8자리 이상을 입력하세요.',
-                        },
-                    ]}
-                    {...fieldErrors.password}
-                >
-                    <Input.Password name="password" />
-                </Form.Item>
-                <Form.Item
+        <>
+            <Card title="로그인">
+                <Form
+                    name="basic"
+                    labelCol={{
+                        span: 8,
+                    }}
                     wrapperCol={{
-                        offset: 8,
                         span: 16,
                     }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
                 >
-                    <Button type="primary" htmlType="submit">
-                        로그인
-                    </Button>
-                </Form.Item>
-            </Form>
-        </Card>
+                    <Form.Item
+                        label="Username"
+                        name="username"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your username!',
+                            },
+                        ]}
+                        hasFeedback
+                        {...fieldErrors.username}
+                        {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
+                    >
+                        <Input name="username" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                            {
+                                min: 8,
+                                message: '8자리 이상을 입력하세요.',
+                            },
+                        ]}
+                        {...fieldErrors.password}
+                    >
+                        <Input.Password name="password" />
+                    </Form.Item>
+                    <Form.Item
+                        wrapperCol={{
+                            offset: 8,
+                            span: 16,
+                        }}
+                    >
+                        <Button type="primary" htmlType="submit">
+                            로그인
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+            <div style={{ textAlign: 'center', opacity: '0.5' }}>
+                <Link to="/accounts/signup/">
+                    <Button type="text">회원가입</Button>
+                </Link>
+            </div>
+        </>
     );
 };
 
