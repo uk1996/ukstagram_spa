@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .serializers import SignupSerializer, SuggestionSerializer
 from django.contrib.auth import get_user_model
 import random
+from django.db.models import Q
 
 
 class Signup(CreateAPIView):
@@ -24,7 +25,14 @@ class SuggestionAPIView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        qs = super().get_queryset().exclude(username=self.request.user)
+        qs = (
+            super()
+            .get_queryset()
+            .exclude(
+                Q(pk__in=self.request.user.following_set.all())
+                | Q(pk=self.request.user.pk)
+            )
+        )
         qs = list(qs)
         random.shuffle(qs)
         return qs
