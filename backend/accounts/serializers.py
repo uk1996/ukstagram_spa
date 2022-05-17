@@ -5,6 +5,12 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["pk", "username", "avatar_url"]
+
+
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -17,9 +23,3 @@ class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["pk", "username", "password"]
-
-
-class SuggestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["pk", "username", "avatar_url"]

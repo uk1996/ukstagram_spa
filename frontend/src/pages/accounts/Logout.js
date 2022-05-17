@@ -10,7 +10,7 @@ const Logout = () => {
 
     return (
         <div onClick={onClick}>
-            <span style={{ fontSize: '13px', opacity: '0.5' }}>Logout</span>
+            <span>로그아웃</span>
         </div>
     );
 };

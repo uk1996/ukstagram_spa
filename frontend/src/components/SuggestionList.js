@@ -50,8 +50,6 @@ const SuggestionList = ({ style }) => {
             });
     };
 
-    console.log(suggestionList);
-
     return (
         <div style={style}>
             <Card

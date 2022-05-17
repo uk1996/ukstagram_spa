@@ -1,27 +1,38 @@
 from rest_framework import permissions, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.generics import CreateAPIView, ListAPIView, get_object_or_404
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from .serializers import SignupSerializer, SuggestionSerializer
+from .serializers import SignupSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 import random
 from django.db.models import Q
 
 
+User = get_user_model()
+
+
+class UserViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=False, methods=["GET"])
+    def me(self, request):
+        instance = User.objects.get(pk=request.user.pk)
+        serializer = self.get_serializer(instance=instance)
+        return Response(serializer.data)
+
+
 class Signup(CreateAPIView):
     serializer_class = SignupSerializer
-    permission_classes = [
-        permissions.AllowAny,
-    ]
-
-
-User = get_user_model()
+    permission_classes = [permissions.AllowAny]
 
 
 class SuggestionAPIView(ListAPIView):
     queryset = User.objects.all()
-    serializer_class = SuggestionSerializer
+    serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):

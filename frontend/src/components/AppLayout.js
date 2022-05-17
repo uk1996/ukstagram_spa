@@ -4,8 +4,8 @@ import { Input, Menu } from 'antd';
 import StoryList from './StoryList';
 import SuggestionList from './SuggestionList';
 import UkstagramImage from '../assets/Ukstagram.png';
-import Logout from '../pages/accounts/Logout';
 import { useAppContext } from '../store';
+import { profileImageItems } from './profileImageItems';
 
 const AppLayout = ({ children }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -48,11 +48,7 @@ const AppLayout = ({ children }) => {
                 </div>
                 <div className="topnav">
                     {isAuthenticated && (
-                        <Menu mode="horizontal">
-                            <Menu.Item>
-                                <Logout />
-                            </Menu.Item>
-                        </Menu>
+                        <Menu items={profileImageItems} mode="horizontal" />
                     )}
                 </div>
             </div>
