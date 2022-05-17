@@ -1,6 +1,6 @@
 import React from 'react';
 import './SuggestionList.scss';
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import Suggestion from './Suggestion';
 import { useUrlContext } from '../utils/UrlProvider';
 import { useAppContext } from '../store';
@@ -24,13 +24,14 @@ const SuggestionList = ({ style }) => {
                 title="Suggestions for you"
                 size="small"
                 extra={
-                    <span
+                    <Button
+                        type="text"
+                        onClick={() => refetch()}
                         style={{ marginLeft: '0.3rem', opacity: '0.5' }}
                         size="small"
-                        onClick={() => refetch()}
                     >
                         reload
-                    </span>
+                    </Button>
                 }
             >
                 {loading && <div>Loading...</div>}
