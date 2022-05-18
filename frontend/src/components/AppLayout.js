@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './AppLayout.scss';
-import { Input, Menu } from 'antd';
+import { Input } from 'antd';
 import StoryList from './StoryList';
 import SuggestionList from './SuggestionList';
 import UkstagramImage from '../assets/Ukstagram.png';
 import { useAppContext } from '../store';
-import { profileImageItems } from './profileImageItems';
+import Logout from '../pages/accounts/Logout';
+import MyImage from './MyImage';
+import PostNewLogo from './PostNewLogo';
+import CustomDropdown from './CuntomDropdown';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 const AppLayout = ({ children }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -15,13 +19,18 @@ const AppLayout = ({ children }) => {
     } = useAppContext();
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        const width =
+            window.location.pathname === '/accounts/profile/' ? '100%' : '70%';
+        if (
+            !isAuthenticated ||
+            window.location.pathname === '/accounts/profile/'
+        ) {
             setAppStyle({
                 gridTemplateAreas:
                     "'header header header' 'contents contents contents' 'footer footer footer'",
             });
             setContentStyle({
-                width: '70%',
+                width: width,
                 justifySelf: 'center',
             });
         } else {
@@ -46,21 +55,42 @@ const AppLayout = ({ children }) => {
                 <div className="search">
                     <Input.Search />
                 </div>
-                <div className="topnav">
-                    {isAuthenticated && (
-                        <Menu items={profileImageItems} mode="horizontal" />
-                    )}
-                </div>
+                {isAuthenticated && (
+                    <div className="topnav">
+                        <div className="postnewlogo">
+                            <PostNewLogo />
+                        </div>
+                        <div className="myimage">
+                            <CustomDropdown
+                                items={[
+                                    {
+                                        label: (
+                                            <Link to="/accounts/profile">
+                                                프로필
+                                            </Link>
+                                        ),
+                                    },
+                                    {
+                                        label: <Logout />,
+                                    },
+                                ]}
+                                logo={<MyImage />}
+                                buttontype="text"
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="contents" style={contentStyle}>
                 {children}
             </div>
-            {isAuthenticated && (
-                <div className="sidebar">
-                    <StoryList style={{ marginBottom: '1rem' }} />
-                    <SuggestionList />
-                </div>
-            )}
+            {isAuthenticated &&
+                window.location.pathname !== '/accounts/profile/' && (
+                    <div className="sidebar">
+                        <StoryList style={{ marginBottom: '1rem' }} />
+                        <SuggestionList />
+                    </div>
+                )}
             <div className="footer">@Ukstagram</div>
         </div>
     );

@@ -24,8 +24,22 @@
         // .search {
         // }
 
-        // .topnav {
-        // }
+        .topnav {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+
+            .postnewlogo {
+                justify-self: left;
+                width: 24px;
+                height: 24px;
+                margin-right: 0.5rem;
+            }
+
+            .myimage {
+                justify-self: right;
+            }
+        }
     }
 
     .sidebar {

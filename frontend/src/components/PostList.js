@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Axios from 'axios';
+import React from 'react';
 import Post from './Post';
 import { useAppContext } from '../store';
 import { Alert } from 'antd';
 import { useUrlContext } from '../utils/UrlProvider';
+import useAxios from 'axios-hooks';
 
 const PostList = () => {
     const {
@@ -11,18 +11,12 @@ const PostList = () => {
     } = useAppContext();
 
     const apiUrl = useUrlContext().defaulturl + '/api/posts/';
+    const headers = { Authorization: `Bearer ${jwtToken}` };
 
-    const [postList, setPostList] = useState();
-
-    useEffect(() => {
-        const headers = { Authorization: `Bearer ${jwtToken}` };
-        Axios.get(apiUrl, { headers })
-            .then((response) => {
-                const { data } = response;
-                setPostList(data);
-            })
-            .catch((error) => {});
-    }, [jwtToken, apiUrl]);
+    const [{ data: postList }] = useAxios({
+        url: apiUrl,
+        headers,
+    });
 
     return (
         <div>
