@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { Card, Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
+import { deleteToken, useAppContext } from '../../store';
 
 const apiUrl = 'http://localhost:8000/accounts/signup/';
 
@@ -10,6 +11,16 @@ const Signup = () => {
     const history = useHistory();
 
     const [fieldErrors, setFieldErrors] = useState({});
+    const {
+        store: { isAuthenticated },
+        dispatch,
+    } = useAppContext();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(deleteToken());
+        }
+    }, [dispatch, isAuthenticated]);
 
     const onFinish = (values) => {
         const { username, password } = values;
