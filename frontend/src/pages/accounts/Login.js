@@ -8,6 +8,7 @@ import { useAppContext, setToken } from '../../store';
 import { useUrlContext } from '../../utils/UrlProvider';
 import { Link } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
+import { parseErrorMessage } from '../../utils/forms';
 
 const Login = () => {
     const {
@@ -66,21 +67,9 @@ const Login = () => {
                         icon: <FrownOutlined style={{ color: '#ff3333' }} />,
                     });
 
-                    const { data: fieldsErrorMessage } = error.response;
+                    const { data: fieldsErrorMessages } = error.response;
 
-                    setFieldErrors(
-                        Object.entries(fieldsErrorMessage).reduce(
-                            (acc, [fieldName, errors]) => {
-                                // errors : ["m1", "m2"]
-                                acc[fieldName] = {
-                                    validateStatus: 'error',
-                                    help: errors.join(' '),
-                                };
-                                return acc;
-                            },
-                            {}, // 초기값
-                        ),
-                    );
+                    setFieldErrors(parseErrorMessage(fieldsErrorMessages));
                 }
             })
             .finally(() => {});

@@ -1,11 +1,65 @@
 import React, { useState } from 'react';
-import { Card, Form, Button, Input } from 'antd';
+import { Card, Form, Button, Input, Upload, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { getBase64FromFile } from '../utils/base64';
+import Axios from 'axios';
+import { useUrlContext } from '../utils/UrlProvider';
+import { useAppContext } from '../store';
+import { parseErrorMessage } from '../utils/forms';
 
 const PostNewForm = () => {
-    const [fieldErrors] = useState({});
+    const [fieldErrors, setFieldErrors] = useState({});
+    const [previewPhoto, setPreviewPhoto] = useState({
+        visible: false,
+        base64: null,
+    });
+    const [fileList, setFileList] = useState([]);
+    const apiUrl = useUrlContext().defaulturl + '/api/posts/';
+    const {
+        store: { jwtToken },
+    } = useAppContext();
+    const headers = { Authorization: `Bearer ${jwtToken}` };
 
-    const handleFinish = () => {};
+    const handleFinish = (fieldValues) => {
+        const {
+            caption,
+            location,
+            photo: { fileList },
+        } = fieldValues;
+
+        const formData = new FormData();
+        formData.append('caption', caption);
+        formData.append('location', location);
+
+        fileList.forEach((file) => {
+            formData.append('photo', file.originFileObj);
+        });
+
+        Axios.post(apiUrl, formData, { headers })
+            .then((response) => {})
+            .catch((error) => {
+                const { status, data: fieldErrorMessages } = error.response;
+                if (typeof fieldErrorMessages === 'string') {
+                    console.log(`Error) ${status}응답을 받았습니다.`);
+                } else {
+                    setFieldErrors(parseErrorMessage(fieldErrorMessages));
+                }
+            });
+    };
     const handleFinishFailed = () => {};
+    const handleUploadChange = ({ fileList }) => {
+        setFileList(fileList);
+    };
+    const handlePreviewPhoto = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64FromFile(file.originFileObj);
+        }
+
+        setPreviewPhoto({
+            visible: true,
+            base64: file.url || file.preview,
+        });
+    };
 
     return (
         <Card title="새 포스팅">
@@ -25,37 +79,67 @@ const PostNewForm = () => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Username"
-                    name="username"
+                    label="Photo"
+                    name="photo"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your username!',
+                            message: '사진을 첨부해주세요.',
                         },
                     ]}
                     hasFeedback
-                    {...fieldErrors.username}
-                    {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
+                    {...fieldErrors.photo}
                 >
-                    <Input name="username" />
+                    <Upload
+                        listType="picture-card"
+                        fileList={fileList}
+                        beforeUpload={() => {
+                            return false;
+                        }}
+                        onChange={handleUploadChange}
+                        onPreview={handlePreviewPhoto}
+                    >
+                        {fileList.length > 0 ? null : (
+                            <div>
+                                <PlusOutlined />
+                                <div className="ant-upload-text">Upload</div>
+                            </div>
+                        )}
+                    </Upload>
                 </Form.Item>
+
                 <Form.Item
-                    label="Password"
-                    name="password"
+                    label="Caption"
+                    name="caption"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your password!',
-                        },
-                        {
-                            min: 8,
-                            message: '8자리 이상을 입력하세요.',
+                            message: 'Caption을 입력해주세요.',
                         },
                     ]}
-                    {...fieldErrors.password}
+                    hasFeedback
+                    {...fieldErrors.caption}
+                    {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
                 >
-                    <Input.Password name="password" />
+                    <Input.TextArea />
                 </Form.Item>
+
+                <Form.Item
+                    label="Location"
+                    name="location"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Location을 입력해주세요.',
+                        },
+                    ]}
+                    hasFeedback
+                    {...fieldErrors.location}
+                    {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
+                >
+                    <Input />
+                </Form.Item>
+
                 <Form.Item
                     wrapperCol={{
                         offset: 8,
@@ -63,9 +147,21 @@ const PostNewForm = () => {
                     }}
                 >
                     <Button type="primary" htmlType="submit">
-                        로그인
+                        등록
                     </Button>
                 </Form.Item>
+
+                <Modal
+                    visible={previewPhoto.visible}
+                    footer={null}
+                    onCancel={() => setPreviewPhoto({ visible: false })}
+                >
+                    <img
+                        src={previewPhoto.base64}
+                        style={{ width: '100%' }}
+                        alt="Preview"
+                    />
+                </Modal>
             </Form>
         </Card>
     );

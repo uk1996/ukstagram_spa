@@ -5,7 +5,9 @@ import AppLayout from '../components/AppLayout';
 const PostNew = () => {
     return (
         <AppLayout>
-            <PostNewForm />
+            <div>
+                <PostNewForm />
+            </div>
         </AppLayout>
     );
 };

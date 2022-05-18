@@ -16,8 +16,6 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
         store: { isAuthenticated },
     } = useAppContext();
 
-    console.log(sidebar);
-
     useEffect(() => {
         if (!sidebar) {
             setAppStyle({
