@@ -31,7 +31,7 @@ const PostList = () => {
             )}
             {postList &&
                 postList.map((post) => {
-                    return <Post post={post} key={post.id} />;
+                    return <Post post={post} key={post.pk} />;
                 })}
         </div>
     );
