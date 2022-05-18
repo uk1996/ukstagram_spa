@@ -25,8 +25,8 @@ class TagSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     author = AuthSerializer(read_only=True)
-    tag_set = TagSerializer(many=True)
-    like_user_set = LikeUserSerializer(many=True)
+    # tag_set = TagSerializer(many=True)
+    # like_user_set = LikeUserSerializer(many=True)
 
     class Meta:
         model = Post
@@ -35,9 +35,9 @@ class PostSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "author",
-            "tag_set",
+            # "tag_set",
             "photo",
             "caption",
             "location",
-            "like_user_set",
+            # "like_user_set",
         ]
