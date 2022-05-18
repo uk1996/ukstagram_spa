@@ -31,8 +31,8 @@ class PostViewSet(ModelViewSet):
 
         username_q = self.request.query_params.get("username", "")
         if username_q:
-            author = User.objects.get(username=username_q)
-            qs = qs.filter(author=author)
+            author = User.objects.filter(username__startswith=username_q)
+            qs = qs.filter(author__in=author)
         return qs
 
     def perform_create(self, serializer):
