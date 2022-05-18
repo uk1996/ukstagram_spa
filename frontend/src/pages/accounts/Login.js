@@ -7,6 +7,7 @@ import Axios from 'axios';
 import { useAppContext, setToken } from '../../store';
 import { useUrlContext } from '../../utils/UrlProvider';
 import { Link } from 'react-router-dom';
+import AppLayout from '../../components/AppLayout';
 
 const Login = () => {
     const {
@@ -90,7 +91,7 @@ const Login = () => {
     };
 
     return (
-        <>
+        <AppLayout>
             <Card title="로그인">
                 <Form
                     name="basic"
@@ -156,7 +157,7 @@ const Login = () => {
                     <Button type="text">회원가입</Button>
                 </Link>
             </div>
-        </>
+        </AppLayout>
     );
 };
 

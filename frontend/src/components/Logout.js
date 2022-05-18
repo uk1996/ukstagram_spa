@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppContext, deleteToken } from '../../store';
+import { useAppContext, deleteToken } from '../store';
 
 const Logout = () => {
     const { dispatch } = useAppContext();

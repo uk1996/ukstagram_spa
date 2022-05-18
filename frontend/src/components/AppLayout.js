@@ -1,36 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import './AppLayout.scss';
 import { Input } from 'antd';
-import StoryList from './StoryList';
-import SuggestionList from './SuggestionList';
 import UkstagramImage from '../assets/Ukstagram.png';
 import { useAppContext } from '../store';
-import Logout from '../pages/accounts/Logout';
+import Logout from './Logout';
 import MyImage from './MyImage';
 import PostNewLogo from './PostNewLogo';
 import CustomDropdown from './CuntomDropdown';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
-const AppLayout = ({ children }) => {
+const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
     const [appStyle, setAppStyle] = useState({});
     const [contentStyle, setContentStyle] = useState({});
     const {
         store: { isAuthenticated },
     } = useAppContext();
 
+    console.log(sidebar);
+
     useEffect(() => {
-        const width =
-            window.location.pathname === '/accounts/profile/' ? '100%' : '70%';
-        if (
-            !isAuthenticated ||
-            window.location.pathname === '/accounts/profile/'
-        ) {
+        if (!sidebar) {
             setAppStyle({
                 gridTemplateAreas:
                     "'header header header' 'contents contents contents' 'footer footer footer'",
             });
             setContentStyle({
-                width: width,
+                width: contentwidth,
                 justifySelf: 'center',
             });
         } else {
@@ -40,7 +35,7 @@ const AppLayout = ({ children }) => {
             });
             setContentStyle({});
         }
-    }, [isAuthenticated]);
+    }, [sidebar, contentwidth]);
 
     return (
         <div className="app" style={appStyle}>
@@ -52,9 +47,11 @@ const AppLayout = ({ children }) => {
                         </a>
                     </>
                 </h1>
-                <div className="search">
-                    <Input.Search />
-                </div>
+                {isAuthenticated && (
+                    <div className="search">
+                        <Input.Search />
+                    </div>
+                )}
                 {isAuthenticated && (
                     <div className="topnav">
                         <div className="postnewlogo">
@@ -84,13 +81,7 @@ const AppLayout = ({ children }) => {
             <div className="contents" style={contentStyle}>
                 {children}
             </div>
-            {isAuthenticated &&
-                window.location.pathname !== '/accounts/profile/' && (
-                    <div className="sidebar">
-                        <StoryList style={{ marginBottom: '1rem' }} />
-                        <SuggestionList />
-                    </div>
-                )}
+            {sidebar && <div className="sidebar">{sidebar}</div>}
             <div className="footer">@Ukstagram</div>
         </div>
     );

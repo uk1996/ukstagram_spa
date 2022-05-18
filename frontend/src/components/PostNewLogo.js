@@ -1,9 +1,15 @@
 import React from 'react';
 import { Button } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 const PostNewLogo = () => {
+    const history = useHistory();
+    const handleClick = () => {
+        history.push('/posts/new/');
+    };
+
     return (
-        <Button type="text" style={{ padding: '0' }}>
+        <Button type="text" style={{ padding: '0' }} onClick={handleClick}>
             <svg
                 aria-label="새로운 게시물"
                 className="_8-yf5 "
