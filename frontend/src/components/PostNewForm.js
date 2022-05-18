@@ -40,11 +40,13 @@ const PostNewForm = () => {
             .catch((error) => {
                 const { status, data: fieldErrorMessages } = error.response;
                 if (typeof fieldErrorMessages === 'string') {
-                    console.log(`Error) ${status}응답을 받았습니다.`);
+                    console.log(`Error) ${status} response`);
                 } else {
                     setFieldErrors(parseErrorMessage(fieldErrorMessages));
                 }
             });
+
+        window.location.replace('/');
     };
     const handleFinishFailed = () => {};
     const handleUploadChange = ({ fileList }) => {
@@ -127,13 +129,6 @@ const PostNewForm = () => {
                 <Form.Item
                     label="Location"
                     name="location"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Location을 입력해주세요.',
-                        },
-                    ]}
-                    hasFeedback
                     {...fieldErrors.location}
                     {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
                 >

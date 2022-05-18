@@ -1,7 +1,11 @@
 from django.db.models import Q
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 import datetime
+
+from rest_framework.response import Response
+
 from .models import Post
 from rest_framework.viewsets import ModelViewSet
 from .serializers import PostSerializer
@@ -25,3 +29,9 @@ class PostViewSet(ModelViewSet):
         )  # 자신이 작성 했거나, 팔로우한 유저의 포스팅
         # qs = qs.filter(created_at__gte=timesince)  # 3일 이내에 작성한 포스팅
         return qs
+
+    def perform_create(self, serializer):
+        post = serializer.save(author=self.request.user)
+        post.tag_set.add(*post.extract_tag_list())
+        post.caption = post.remove_tag_in_caption()
+        post.save()
