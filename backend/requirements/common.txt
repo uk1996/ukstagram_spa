@@ -4,3 +4,4 @@ djangorestframework
 django-cors-headers
 drf-jwt
 django-pydenticon
+django-filter

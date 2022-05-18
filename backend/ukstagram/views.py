@@ -1,14 +1,14 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Q
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 import datetime
 
-from rest_framework.response import Response
-
 from .models import Post
 from rest_framework.viewsets import ModelViewSet
 from .serializers import PostSerializer
+
+User = get_user_model()
 
 
 class PostViewSet(ModelViewSet):
@@ -28,6 +28,11 @@ class PostViewSet(ModelViewSet):
             | Q(author__in=self.request.user.following_set.all())
         )  # 자신이 작성 했거나, 팔로우한 유저의 포스팅
         # qs = qs.filter(created_at__gte=timesince)  # 3일 이내에 작성한 포스팅
+
+        username_q = self.request.query_params.get("username", "")
+        if username_q:
+            author = User.objects.get(username=username_q)
+            qs = qs.filter(author=author)
         return qs
 
     def perform_create(self, serializer):
