@@ -5,10 +5,19 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["pk", "username", "avatar_url"]
+        fields = ["pk", "username"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    following_set = FollowSerializer(many=True)
+    follower_set = FollowSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = ["pk", "username", "avatar_url", "following_set", "follower_set"]
 
 
 class SignupSerializer(serializers.ModelSerializer):
