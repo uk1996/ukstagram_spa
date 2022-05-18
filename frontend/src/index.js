@@ -6,13 +6,16 @@ import './index.css';
 import Root from './pages';
 import { AppProvider } from './store';
 import UrlProvider from './utils/UrlProvider';
+import PostListProvider from './utils/PostListProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
         <AppProvider>
             <UrlProvider>
-                <Root />
+                <PostListProvider>
+                    <Root />
+                </PostListProvider>
             </UrlProvider>
         </AppProvider>
     </BrowserRouter>,

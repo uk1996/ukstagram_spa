@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './AppLayout.scss';
-import { Input } from 'antd';
 import UkstagramImage from '../assets/Ukstagram.png';
 import { useAppContext } from '../store';
 import Logout from './Logout';
@@ -8,6 +7,7 @@ import MyImage from './MyImage';
 import PostNewLogo from './PostNewLogo';
 import CustomDropdown from './CuntomDropdown';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import UserFilter from './UserFilter';
 
 const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -47,7 +47,7 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
                 </h1>
                 {isAuthenticated && (
                     <div className="search">
-                        <Input.Search />
+                        <UserFilter />
                     </div>
                 )}
                 {isAuthenticated && (
