@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "rest_framework_jwt.blacklist",
     "django_pydenticon",
     "django_filters",
+    "imagekit",
     # local apps
     "accounts",
     "ukstagram",

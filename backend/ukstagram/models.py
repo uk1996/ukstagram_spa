@@ -3,6 +3,8 @@ import re
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 
 class TimestampedModel(models.Model):
@@ -17,7 +19,12 @@ class Post(TimestampedModel):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="my_post_set", on_delete=models.CASCADE
     )
-    photo = models.ImageField(upload_to="ukstagram/post/%Y/%m/%d")
+    photo = ProcessedImageField(
+        upload_to="ukstagram/post/%Y/%m/%d",
+        processors=[ResizeToFill(512, 512)],
+        format="JPEG",
+        options={"quality": 100},
+    )
     caption = models.TextField()
     tag_set = models.ManyToManyField("Tag", blank=True)
     location = models.CharField(max_length=100, blank=True)
