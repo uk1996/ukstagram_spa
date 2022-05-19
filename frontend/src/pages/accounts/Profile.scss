@@ -1,0 +1,35 @@
+.info {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 2fr;
+
+    .userAvatar {
+        justify-self: center;
+    }
+
+    .userInfo {
+        justify-self: left;
+        width: 60%;
+        .length {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(3, 1fr);
+
+            .post {
+                justify-self: left;
+            }
+            .follower {
+                justify-self: left;
+            }
+            .following {
+                justify-self: left;
+            }
+        }
+    }
+}
+
+.postList {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+}

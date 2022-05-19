@@ -9,4 +9,5 @@ router.register("posts", views.PostViewSet)
 
 urlpatterns = [
     path("api/", include(router.urls)),
+    path("api/user_page/", views.user_page),
 ]

@@ -10,7 +10,6 @@ const Routes = ({ match }) => {
         <>
             <Route exact path={match.url + '/login/'} component={Login} />
             <LoginRequiredRoute
-                exact
                 path={match.url + '/profile/'}
                 component={Profile}
             />
