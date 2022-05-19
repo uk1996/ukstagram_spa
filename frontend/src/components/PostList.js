@@ -7,8 +7,6 @@ import { usePostListContext } from '../utils/PostListProvider';
 const PostList = () => {
     const { postList } = usePostListContext();
 
-    console.log(postList);
-
     return (
         <div>
             {postList && postList.length === 0 && (

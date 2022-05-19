@@ -6,6 +6,7 @@ import { useAppContext } from '../../store';
 import './Profile.scss';
 import UserAvatar from '../../components/UserAvatar';
 import { usePostListContext, setPostList } from '../../utils/PostListProvider';
+import { Row, Col } from 'antd';
 
 const Profile = ({ location }) => {
     const defaultUrl = useUrlContext().defaulturl;
@@ -65,7 +66,31 @@ const Profile = ({ location }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="postList"></div>
+                    <div className="postList">
+                        <Row gutter={16}>
+                            {postList.map((post) => {
+                                return (
+                                    <Col
+                                        className="gutter-row"
+                                        span={8}
+                                        key={post.pk}
+                                    >
+                                        <div
+                                            style={{
+                                                marginBottom: '0.5rem',
+                                            }}
+                                        >
+                                            <img
+                                                style={{ width: '100%' }}
+                                                src={defaultUrl + post.photo}
+                                                alt=""
+                                            />
+                                        </div>
+                                    </Col>
+                                );
+                            })}
+                        </Row>
+                    </div>
                 </>
             )}
         </AppLayout>

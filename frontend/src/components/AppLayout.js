@@ -45,7 +45,7 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
                         </a>
                     </>
                 </h1>
-                {isAuthenticated && (
+                {window.location.pathname === '/' && isAuthenticated && (
                     <div className="search">
                         <UserFilter />
                     </div>

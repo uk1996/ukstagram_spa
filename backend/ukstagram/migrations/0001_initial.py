@@ -31,7 +31,9 @@ class Migration(migrations.Migration):
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("name", models.CharField(max_length=50, unique=True)),
             ],
-            options={"abstract": False,},
+            options={
+                "abstract": False,
+            },
         ),
         migrations.CreateModel(
             name="Post",
@@ -73,7 +75,9 @@ class Migration(migrations.Migration):
                 ),
                 ("tag_set", models.ManyToManyField(blank=True, to="ukstagram.tag")),
             ],
-            options={"ordering": ["-id"],},
+            options={
+                "ordering": ["-id"],
+            },
         ),
         migrations.CreateModel(
             name="Comment",
@@ -104,6 +108,8 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"ordering": ["-id"],},
+            options={
+                "ordering": ["-id"],
+            },
         ),
     ]
