@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from 'antd';
 import Axios from 'axios';
 import { useUrlContext } from '../utils/UrlProvider';
@@ -12,23 +12,25 @@ const UserFilter = () => {
         store: { jwtToken },
     } = useAppContext();
     const { dispatch } = usePostListContext();
+    const [searchUserName, setSearchUserName] = useState('');
 
-    const handleChange = useCallback(
-        ({ target }) => {
-            const headers = { Authorization: `Bearer ${jwtToken}` };
-            const requestUrl = apiUrl + `?username=${target.value}`;
+    useEffect(() => {
+        const headers = { Authorization: `Bearer ${jwtToken}` };
+        const requestUrl = apiUrl + `?username=${searchUserName}`;
 
-            Axios.get(requestUrl, { headers })
-                .then((response) => {
-                    const postListFilter = response.data;
-                    dispatch(setPostList(postListFilter));
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-        },
-        [apiUrl, jwtToken, dispatch],
-    );
+        Axios.get(requestUrl, { headers })
+            .then((response) => {
+                const postListFilter = response.data;
+                dispatch(setPostList(postListFilter));
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
+    }, [searchUserName, jwtToken, dispatch, apiUrl]);
+
+    const handleChange = ({ target }) => {
+        setSearchUserName(target.value);
+    };
 
     return (
         <Input.Search
