@@ -6,7 +6,6 @@ import { useAppContext } from '../../store';
 import './Profile.scss';
 import UserAvatar from '../../components/UserAvatar';
 import { usePostListContext, setPostList } from '../../utils/PostListProvider';
-import Post from '../../components/Post';
 
 const Profile = ({ location }) => {
     const defaultUrl = useUrlContext().defaulturl;
