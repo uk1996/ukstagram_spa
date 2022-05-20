@@ -6,8 +6,9 @@ import Logout from './Logout';
 import MyImage from './MyImage';
 import PostNewLogo from './PostNewLogo';
 import CustomDropdown from './CuntomDropdown';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link } from 'react-router-dom';
 import UserFilter from './UserFilter';
+import { useMyUserContext } from '../utils/MyUserProvider';
 
 const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -15,6 +16,7 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
     const {
         store: { isAuthenticated },
     } = useAppContext();
+    const { myUser } = useMyUserContext();
 
     useEffect(() => {
         if (!sidebar) {
@@ -60,7 +62,12 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
                                 items={[
                                     {
                                         label: (
-                                            <Link to="/accounts/profile">
+                                            <Link
+                                                to={
+                                                    '/accounts/profile/' +
+                                                    myUser.username
+                                                }
+                                            >
                                                 프로필
                                             </Link>
                                         ),

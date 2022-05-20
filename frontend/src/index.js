@@ -7,15 +7,18 @@ import Root from './pages';
 import { AppProvider } from './store';
 import UrlProvider from './utils/UrlProvider';
 import PostListProvider from './utils/PostListProvider';
+import MyUserProvdier from './utils/MyUserProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
         <AppProvider>
             <UrlProvider>
-                <PostListProvider>
-                    <Root />
-                </PostListProvider>
+                <MyUserProvdier>
+                    <PostListProvider>
+                        <Root />
+                    </PostListProvider>
+                </MyUserProvdier>
             </UrlProvider>
         </AppProvider>
     </BrowserRouter>,
