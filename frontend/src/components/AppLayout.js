@@ -41,17 +41,20 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
         <div className="app" style={appStyle}>
             <div className="header">
                 <h1 className="page-title">
-                    <>
-                        <a href="/">
-                            <img src={UkstagramImage} alt="ukstagram" />
-                        </a>
-                    </>
+                    <div
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            window.location.replace('/');
+                        }}
+                    >
+                        <img src={UkstagramImage} alt="ukstagram" />
+                    </div>
                 </h1>
-                {window.location.pathname === '/' && isAuthenticated && (
+                {isAuthenticated && (
                     <div className="search">
                         <Input.Search
                             name="username"
-                            placeholder="username을 입력해주세요."
+                            placeholder="username 검색"
                         />
                     </div>
                 )}
