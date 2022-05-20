@@ -1,8 +1,28 @@
 import React from 'react';
-import { Avatar } from 'antd';
 
-const UserAvatar = ({ avatarUrl, size }) => {
-    return <Avatar size={size} icon={<img src={avatarUrl} alt="" />} />;
+const UserAvatar = ({ avatarUrl, divposition }) => {
+    return (
+        <div
+            style={{
+                position: 'relative',
+                width: '50%',
+                paddingBottom: '50%',
+                overflow: 'hidden',
+                ...divposition,
+            }}
+        >
+            <img
+                style={{
+                    borderRadius: '50%',
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                }}
+                src={avatarUrl}
+                alt=""
+            />
+        </div>
+    );
 };
 
 export default UserAvatar;

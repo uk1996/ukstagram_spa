@@ -81,27 +81,37 @@ const Profile = ({ location }) => {
         <AppLayout contentwidth="100%">
             {username && user && postList && (
                 <>
-                    <div className="info">
-                        <div className="userAvatar">
+                    <Row gutter={0}>
+                        <Col className="gutter-row" span={8}>
                             <UserAvatar
-                                size={150}
+                                divposition={{ left: '35%' }}
                                 avatarUrl={defaultUrl + user.avatar_url}
                             />
-                        </div>
-                        <div className="userInfo">
-                            <div style={{ display: 'block' }}>
-                                <h1>{user.username}</h1>
+                        </Col>
+                        <Col className="gutter-row" span={16}>
+                            <div>
+                                <p
+                                    style={{
+                                        fontSize: '200%',
+                                        fontWeight: '500',
+                                        marginBottom: '2%',
+                                    }}
+                                >
+                                    {username}
+                                </p>
                             </div>
-                            <div className="length">
-                                <div className="post">
-                                    게시물 {postList.length}
-                                </div>
-                                <div className="follower">
-                                    팔로워 {user.follower_set.length}
-                                </div>
-                                <div className="following">
-                                    팔로잉 {user.following_set.length}
-                                </div>
+                            <div style={{ width: '60%', marginBottom: '3%' }}>
+                                <Row gutter={0}>
+                                    <Col className="gutter-row" span={8}>
+                                        게시물 {postList.length}
+                                    </Col>
+                                    <Col className="gutter-row" span={8}>
+                                        팔로워 {user.follower_set.length}
+                                    </Col>
+                                    <Col className="gutter-row" span={8}>
+                                        팔로잉 {user.following_set.length}
+                                    </Col>
+                                </Row>
                             </div>
                             {myUser.username !== username && (
                                 <div>
@@ -117,9 +127,9 @@ const Profile = ({ location }) => {
                                     )}
                                 </div>
                             )}
-                        </div>
-                    </div>
-                    <hr style={{ marginTop: '3rem', opacity: '0.7' }} />
+                        </Col>
+                    </Row>
+                    <hr style={{ marginTop: '1.5rem', opacity: '0.7' }} />
                     <div className="postList">
                         <Row gutter={16}>
                             {postList.map((post) => {
@@ -131,7 +141,7 @@ const Profile = ({ location }) => {
                                     >
                                         <div
                                             style={{
-                                                marginBottom: '0.5rem',
+                                                marginBottom: '1.2rem',
                                             }}
                                         >
                                             <img
