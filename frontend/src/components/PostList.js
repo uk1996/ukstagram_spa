@@ -15,7 +15,7 @@ const PostList = () => {
     const [loading, setLoading] = useState(false);
     const [postList, setPostList] = useState();
     const [ref, inView] = useInView();
-    const [error, setError] = useState();
+    const [finalPageMessage, setFinalPageMessage] = useState();
 
     console.log(loading);
 
@@ -25,19 +25,18 @@ const PostList = () => {
         const requestUrl = apiUrl + `?page=${page}`;
         setLoading(true);
 
-        Axios.get(requestUrl, { headers })
-            .then((response) => {
-                setPostList((prevState) => {
-                    if (prevState) {
-                        return [...prevState, ...response.data.results];
-                    } else {
-                        return response.data.results;
-                    }
-                });
-            })
-            .catch(() => {
-                setError('마지막 포스팅 입니다.');
+        Axios.get(requestUrl, { headers }).then((response) => {
+            if (!response.data.next) {
+                setFinalPageMessage('마지막 포스팅 입니다.');
+            }
+            setPostList((prevState) => {
+                if (prevState) {
+                    return [...prevState, ...response.data.results];
+                } else {
+                    return response.data.results;
+                }
             });
+        });
 
         setLoading(false);
     }, [apiUrl, jwtToken, page]);
@@ -76,10 +75,10 @@ const PostList = () => {
                         </React.Fragment>
                     );
                 })}
-            {error && (
+            {finalPageMessage && (
                 <Alert
                     type="info"
-                    message={error}
+                    message={finalPageMessage}
                     style={{
                         width: '90%',
                         marginLeft: 'auto',
