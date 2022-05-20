@@ -5,7 +5,6 @@ import { useUrlContext } from '../../utils/UrlProvider';
 import { useAppContext } from '../../store';
 import './Profile.scss';
 import UserAvatar from '../../components/UserAvatar';
-import { usePostListContext, setPostList } from '../../utils/PostListProvider';
 import { Row, Col, Button } from 'antd';
 import { useMyUserContext } from '../../utils/MyUserProvider';
 
@@ -19,9 +18,9 @@ const Profile = ({ location }) => {
     } = useAppContext();
     const [username, setUserName] = useState();
     const [user, setUser] = useState();
-    const { postList, dispatch } = usePostListContext();
     const [isFollow, setIsFollow] = useState();
     const { myUser } = useMyUserContext();
+    const [postList, setPostList] = useState();
 
     useEffect(() => {
         setUserName(location.pathname.split('/').at(-1));
@@ -36,55 +35,47 @@ const Profile = ({ location }) => {
         }
     }, [myUser, username]);
 
-    useEffect(() => {
-        const headers = { Authorization: `Bearer ${jwtToken}` };
-        if (username) {
+    const requestUerPage = useCallback(
+        ({ headers }) => {
             Axios.post(userPageUrl, { username }, { headers })
                 .then((response) => {
                     const { user, postList } = response.data;
                     setUser(user);
-                    dispatch(setPostList(postList));
+                    setPostList(postList);
                 })
                 .catch((error) => {
                     console.log(error);
                 });
+        },
+        [userPageUrl, username],
+    );
+
+    useEffect(() => {
+        if (username) {
+            const headers = { Authorization: `Bearer ${jwtToken}` };
+            requestUerPage({ headers });
         }
-    }, [username, userPageUrl, jwtToken, dispatch]);
+    }, [requestUerPage, jwtToken, username]);
 
     const followClick = useCallback(() => {
+        setIsFollow(true);
         if (username) {
-            setIsFollow(true);
             const headers = { Authorization: `Bearer ${jwtToken}` };
             Axios.post(followUrl, { username }, { headers }).then(() => {
-                Axios.post(userPageUrl, { username }, { headers })
-                    .then((response) => {
-                        const { user, postList } = response.data;
-                        setUser(user);
-                        dispatch(setPostList(postList));
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                requestUerPage({ headers });
             });
         }
-    }, [jwtToken, username, followUrl, dispatch, userPageUrl]);
+    }, [requestUerPage, jwtToken, username, followUrl]);
+
     const unFollowClick = useCallback(() => {
+        setIsFollow(false);
         if (username) {
-            setIsFollow(false);
             const headers = { Authorization: `Bearer ${jwtToken}` };
             Axios.post(unFollowUrl, { username }, { headers }).then(() => {
-                Axios.post(userPageUrl, { username }, { headers })
-                    .then((response) => {
-                        const { user, postList } = response.data;
-                        setUser(user);
-                        dispatch(setPostList(postList));
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                requestUerPage({ headers });
             });
         }
-    }, [jwtToken, username, unFollowUrl, dispatch, userPageUrl]);
+    }, [requestUerPage, jwtToken, username, unFollowUrl]);
 
     return (
         <AppLayout contentwidth="100%">
@@ -128,6 +119,7 @@ const Profile = ({ location }) => {
                             )}
                         </div>
                     </div>
+                    <hr style={{ marginTop: '3rem', opacity: '0.7' }} />
                     <div className="postList">
                         <Row gutter={16}>
                             {postList.map((post) => {
