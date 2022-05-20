@@ -12,6 +12,7 @@ from accounts.serializers import UserSerializer
 from .models import Post
 from rest_framework.viewsets import ModelViewSet
 from .serializers import PostSerializer
+from .pagination import PostPageNumberPagination
 
 User = get_user_model()
 
@@ -24,6 +25,7 @@ class PostViewSet(ModelViewSet):
     )
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = PostPageNumberPagination
 
     def get_queryset(self):
         # timesince = timezone.now() - datetime.timedelta(days=3)

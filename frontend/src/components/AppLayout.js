@@ -7,8 +7,8 @@ import MyImage from './MyImage';
 import PostNewLogo from './PostNewLogo';
 import CustomDropdown from './CuntomDropdown';
 import { Link } from 'react-router-dom';
-import UserFilter from './UserFilter';
 import { useMyUserContext } from '../utils/MyUserProvider';
+import { Input } from 'antd';
 
 const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -49,7 +49,10 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
                 </h1>
                 {window.location.pathname === '/' && isAuthenticated && (
                     <div className="search">
-                        <UserFilter />
+                        <Input.Search
+                            name="username"
+                            placeholder="username을 입력해주세요."
+                        />
                     </div>
                 )}
                 {isAuthenticated && (
