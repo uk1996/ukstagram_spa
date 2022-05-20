@@ -13,20 +13,32 @@ const PostList = () => {
     } = useAppContext();
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [postList, setPostList] = useState([]);
+    const [postList, setPostList] = useState();
     const [ref, inView] = useInView();
+    const [error, setError] = useState();
+
+    console.log(loading);
 
     // 서버에서 아이템을 가지고 오는 함수
-    const getItems = useCallback(async () => {
+    const getItems = useCallback(() => {
         const headers = { Authorization: `Bearer ${jwtToken}` };
         const requestUrl = apiUrl + `?page=${page}`;
-
         setLoading(true);
-        Axios.get(requestUrl, { headers }).then((response) => {
-            setPostList((prevState) => {
-                return [...prevState, ...response.data.results];
+
+        Axios.get(requestUrl, { headers })
+            .then((response) => {
+                setPostList((prevState) => {
+                    if (prevState) {
+                        return [...prevState, ...response.data.results];
+                    } else {
+                        return response.data.results;
+                    }
+                });
+            })
+            .catch(() => {
+                setError('마지막 포스팅 입니다.');
             });
-        });
+
         setLoading(false);
     }, [apiUrl, jwtToken, page]);
 
@@ -44,13 +56,14 @@ const PostList = () => {
 
     return (
         <div>
-            {postList.length === 0 && (
+            {postList && postList.length === 0 && !loading && (
                 <Alert type="warning" message="포스팅이 없습니다." />
             )}
-            {postList.length > 0 &&
+            {postList &&
+                postList.length > 0 &&
                 postList.map((post, idx) => {
                     return (
-                        <React.Fragment key={post.pk}>
+                        <React.Fragment key={idx}>
                             {postList.length - 1 === idx ? (
                                 <div ref={ref}>
                                     <Post post={post} />
@@ -63,6 +76,17 @@ const PostList = () => {
                         </React.Fragment>
                     );
                 })}
+            {error && (
+                <Alert
+                    type="info"
+                    message={error}
+                    style={{
+                        width: '90%',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                    }}
+                />
+            )}
         </div>
     );
 };
