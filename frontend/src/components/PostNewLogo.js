@@ -9,10 +9,6 @@ const PostNewLogo = () => {
         setIsModalVisible(true);
     };
 
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
@@ -62,9 +58,9 @@ const PostNewLogo = () => {
                 </svg>
             </Button>
             <Modal
-                title="Basic Modal"
+                footer={null}
+                title="새포스팅"
                 visible={isModalVisible}
-                onOk={handleOk}
                 onCancel={handleCancel}
             >
                 <PostNewForm></PostNewForm>

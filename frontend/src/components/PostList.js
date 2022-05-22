@@ -75,7 +75,7 @@ const PostList = () => {
                         </React.Fragment>
                     );
                 })}
-            {finalPageMessage && (
+            {finalPageMessage && postList.length > 0 && (
                 <Alert
                     type="info"
                     message={finalPageMessage}
