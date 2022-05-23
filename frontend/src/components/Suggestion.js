@@ -2,34 +2,27 @@ import React from 'react';
 import { Button, Avatar } from 'antd';
 import './Suggestion.scss';
 import { useUrlContext } from '../utils/UrlProvider';
+import { Link } from 'react-router-dom';
 
 const Suggestion = ({ username, avatar_url, is_follow, onFollowUser }) => {
     const imgUrl = useUrlContext().defaulturl + avatar_url;
 
     return (
         <div className="suggestion">
-            <div
-                className="avatar"
-                onClick={() => {
-                    window.location.replace(`accounts/profile/${username}`);
-                }}
-                style={{ cursor: 'pointer' }}
-            >
-                <Avatar size="small" icon={<img src={imgUrl} alt="" />} />
-            </div>
-            <div
-                className="username"
-                onClick={() => {
-                    window.location.replace(`accounts/profile/${username}`);
-                }}
-                style={{ cursor: 'pointer' }}
-            >
-                {
-                    <span style={{ color: 'black', opacity: '0.9' }}>
-                        {username}
-                    </span>
-                }
-            </div>
+            <Link to={`/accounts/profile/${username}`}>
+                <div className="avatar" style={{ cursor: 'pointer' }}>
+                    <Avatar size="small" icon={<img src={imgUrl} alt="" />} />
+                </div>
+            </Link>
+            <Link to={`/accounts/profile/${username}`}>
+                <div className="username" style={{ cursor: 'pointer' }}>
+                    {
+                        <span style={{ color: 'black', opacity: '0.9' }}>
+                            {username}
+                        </span>
+                    }
+                </div>
+            </Link>
 
             <div className="action">
                 {is_follow && (
