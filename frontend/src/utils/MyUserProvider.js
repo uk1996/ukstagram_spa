@@ -26,7 +26,7 @@ const MyUserProvdier = ({ children }) => {
     }, [jwtToken, isAuthenticated, apiUrl]);
 
     return (
-        <MyUserContext.Provider value={{ myUser }}>
+        <MyUserContext.Provider value={{ myUser, setMyUser }}>
             {children}
         </MyUserContext.Provider>
     );
