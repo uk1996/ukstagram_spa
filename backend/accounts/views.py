@@ -8,6 +8,7 @@ from .serializers import SignupSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 import random
 from django.db.models import Q
+from .pagination import UserSerarchPagination
 
 
 User = get_user_model()
@@ -46,6 +47,20 @@ class SuggestionAPIView(ListAPIView):
         )
         qs = list(qs)
         random.shuffle(qs)
+        return qs
+
+
+class UserSearchAPI(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        username_q = self.request.query_params.get("username", "")
+        if username_q:
+            qs = User.objects.filter(username__startswith=username_q)
         return qs
 
 

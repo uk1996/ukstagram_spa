@@ -23,4 +23,5 @@ urlpatterns = [
     path("follow/", views.user_follow, name="user_follow"),
     path("unfollow/", views.user_unfollow, name="user_unfollow"),
     path("", include(router.urls)),
+    path("usersearch/", views.UserSearchAPI.as_view(), name="user_search"),
 ]

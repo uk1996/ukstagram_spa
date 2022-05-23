@@ -8,7 +8,7 @@ import PostNewLogo from './PostNewLogo';
 import CustomDropdown from './CuntomDropdown';
 import { Link } from 'react-router-dom';
 import { useMyUserContext } from '../utils/MyUserProvider';
-import { Input } from 'antd';
+import UserSearch from './UserSearch';
 
 const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -50,14 +50,7 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
                         <img src={UkstagramImage} alt="ukstagram" />
                     </div>
                 </h1>
-                {isAuthenticated && (
-                    <div className="search">
-                        <Input.Search
-                            name="username"
-                            placeholder="username 검색"
-                        />
-                    </div>
-                )}
+                {isAuthenticated && <UserSearch />}
                 {isAuthenticated && (
                     <div className="topnav">
                         <div className="postnewlogo">
