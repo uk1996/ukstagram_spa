@@ -37,20 +37,7 @@ const UserSearch = () => {
                 return {
                     key: user.pk,
                     value: (
-                        <Row
-                            onClick={() => {
-                                history.push(
-                                    `/accounts/profile/${user.username}`,
-                                );
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === 13) {
-                                    history.push(
-                                        `/accounts/profile/${user.username}`,
-                                    );
-                                }
-                            }}
-                        >
+                        <Row>
                             <Col span={8}>
                                 <Avatar
                                     icon={
@@ -75,6 +62,13 @@ const UserSearch = () => {
                 options={options}
                 style={{
                     width: 200,
+                }}
+                onSelect={(e) => {
+                    history.push(
+                        `/accounts/profile/${
+                            e.props.children.at(1).props.children
+                        }`,
+                    );
                 }}
             >
                 <Input.Search
