@@ -1,54 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './SuggestionList.scss';
 import { Card, Button } from 'antd';
 import Suggestion from './Suggestion';
 import { useUrlContext } from '../utils/UrlProvider';
 import { useAppContext } from '../store';
 import useAxios from 'axios-hooks';
-import Axios from 'axios';
 
 const SuggestionList = ({ style }) => {
     const {
         store: { jwtToken },
     } = useAppContext();
     const listUrl = useUrlContext().defaulturl + '/accounts/suggestions/';
-    const followUrl = useUrlContext().defaulturl + '/accounts/follow/';
     const headers = { Authorization: `Bearer ${jwtToken}` };
-    const [suggestionList, setSuggestionList] = useState([]);
 
-    const [{ data: orignSuggestionList, loading, error }, refetch] = useAxios({
+    const [{ data: suggestionList, loading, error }, refetch] = useAxios({
         url: listUrl,
         headers,
     });
-
-    useEffect(() => {
-        if (!orignSuggestionList) setSuggestionList([]);
-        else
-            setSuggestionList(
-                orignSuggestionList.map((suggestion) => ({
-                    ...suggestion,
-                    is_follow: false,
-                })),
-            );
-    }, [orignSuggestionList]);
-
-    const onFollowUser = (username) => {
-        Axios.post(followUrl, { username }, { headers })
-            .then((response) => {
-                setSuggestionList((prevState) => {
-                    return prevState.map((suggestion) => {
-                        if (suggestion.username === username) {
-                            return { ...suggestion, is_follow: true };
-                        } else {
-                            return suggestion;
-                        }
-                    });
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
 
     return (
         <div style={style}>
@@ -69,20 +37,17 @@ const SuggestionList = ({ style }) => {
                 {loading && <div>Loading...</div>}
                 {error && <div>error</div>}
 
-                {suggestionList.length === 0 && (
+                {suggestionList && suggestionList.length === 0 && (
                     <span style={{ opacity: '0.5' }}>
                         추천 유저가 없습니다.
                     </span>
                 )}
-                {suggestionList.map((suggestion) => {
-                    return (
-                        <Suggestion
-                            {...suggestion}
-                            key={suggestion.pk}
-                            onFollowUser={onFollowUser}
-                        />
-                    );
-                })}
+                {suggestionList &&
+                    suggestionList.map((suggestion) => {
+                        return (
+                            <Suggestion {...suggestion} key={suggestion.pk} />
+                        );
+                    })}
             </Card>
         </div>
     );

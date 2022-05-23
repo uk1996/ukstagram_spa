@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Avatar } from 'antd';
 import './Suggestion.scss';
 import { useUrlContext } from '../utils/UrlProvider';
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../store';
+import Axios from 'axios';
 
-const Suggestion = ({ username, avatar_url, is_follow, onFollowUser }) => {
-    const imgUrl = useUrlContext().defaulturl + avatar_url;
+const Suggestion = ({ username, avatar_url, is_follow }) => {
+    const defaultUrl = useUrlContext().defaulturl;
+    const imgUrl = defaultUrl + avatar_url;
+    const [isFollow, setIsFollow] = useState();
+    const {
+        store: { jwtToken },
+    } = useAppContext();
+
+    const onFollowUser = () => {
+        setIsFollow(true);
+        const followUrl = defaultUrl + '/accounts/follow/';
+        const headers = { Authorization: `Bearer ${jwtToken}` };
+        Axios.post(followUrl, { username }, { headers });
+    };
 
     return (
         <div className="suggestion">
@@ -25,10 +39,10 @@ const Suggestion = ({ username, avatar_url, is_follow, onFollowUser }) => {
             </Link>
 
             <div className="action">
-                {is_follow && (
+                {isFollow && (
                     <span style={{ opacity: '0.5' }}>following...</span>
                 )}
-                {!is_follow && (
+                {!isFollow && (
                     <Button size="small" onClick={() => onFollowUser(username)}>
                         Follow
                     </Button>
