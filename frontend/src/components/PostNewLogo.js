@@ -63,7 +63,9 @@ const PostNewLogo = () => {
                 visible={isModalVisible}
                 onCancel={handleCancel}
             >
-                <PostNewForm></PostNewForm>
+                <PostNewForm
+                    setIsModalVisible={setIsModalVisible}
+                ></PostNewForm>
             </Modal>
         </>
     );

@@ -9,6 +9,7 @@ import CustomDropdown from './CuntomDropdown';
 import { Link } from 'react-router-dom';
 import { useMyUserContext } from '../utils/MyUserProvider';
 import UserSearch from './UserSearch';
+import { useHistory } from 'react-router-dom';
 
 const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
     const [appStyle, setAppStyle] = useState({});
@@ -17,6 +18,7 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
         store: { isAuthenticated },
     } = useAppContext();
     const { myUser } = useMyUserContext();
+    const history = useHistory();
 
     useEffect(() => {
         if (!sidebar) {
@@ -44,7 +46,7 @@ const AppLayout = ({ children, sidebar, contentwidth = '70%' }) => {
                     <div
                         style={{ cursor: 'pointer' }}
                         onClick={() => {
-                            window.location.replace('/');
+                            history.push('/');
                         }}
                     >
                         <img src={UkstagramImage} alt="ukstagram" />

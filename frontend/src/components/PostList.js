@@ -17,8 +17,6 @@ const PostList = () => {
     const [ref, inView] = useInView();
     const [finalPageMessage, setFinalPageMessage] = useState();
 
-    console.log(loading);
-
     // 서버에서 아이템을 가지고 오는 함수
     const getItems = useCallback(() => {
         const headers = { Authorization: `Bearer ${jwtToken}` };

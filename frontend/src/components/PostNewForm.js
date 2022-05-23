@@ -6,8 +6,9 @@ import Axios from 'axios';
 import { useUrlContext } from '../utils/UrlProvider';
 import { useAppContext } from '../store';
 import { parseErrorMessage } from '../utils/forms';
+import { useHistory } from 'react-router-dom';
 
-const PostNewForm = () => {
+const PostNewForm = ({ setIsModalVisible }) => {
     const [fieldErrors, setFieldErrors] = useState({});
     const [previewPhoto, setPreviewPhoto] = useState({
         visible: false,
@@ -19,6 +20,7 @@ const PostNewForm = () => {
         store: { jwtToken },
     } = useAppContext();
     const headers = { Authorization: `Bearer ${jwtToken}` };
+    const history = useHistory();
 
     const handleFinish = (fieldValues) => {
         const {
@@ -36,7 +38,10 @@ const PostNewForm = () => {
         });
 
         Axios.post(apiUrl, formData, { headers })
-            .then((response) => {})
+            .then(() => {
+                setIsModalVisible(false);
+                history.go('/');
+            })
             .catch((error) => {
                 const { status, data: fieldErrorMessages } = error.response;
                 if (typeof fieldErrorMessages === 'string') {
@@ -138,11 +143,7 @@ const PostNewForm = () => {
                     span: 16,
                 }}
             >
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => window.location.replace('/')}
-                >
+                <Button type="primary" htmlType="submit">
                     등록
                 </Button>
             </Form.Item>
