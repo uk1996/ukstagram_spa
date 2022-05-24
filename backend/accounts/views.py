@@ -69,7 +69,7 @@ def user_follow(request):
     follow_username = request.data["username"]
     follow_user = get_object_or_404(User, username=follow_username)
     request.user.following_set.add(follow_user)
-    return Response(status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["POST"])
@@ -77,4 +77,4 @@ def user_unfollow(request):
     unfollow_username = request.data["username"]
     unfollow_user = get_object_or_404(User, username=unfollow_username)
     request.user.following_set.remove(unfollow_user)
-    return Response(status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_204_NO_CONTENT)

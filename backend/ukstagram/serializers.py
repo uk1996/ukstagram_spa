@@ -26,7 +26,14 @@ class TagSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     author = AuthSerializer(read_only=True)
     tag_set = TagSerializer(many=True, read_only=True)
-    like_user_set = LikeUserSerializer(many=True, read_only=True)
+    # like_user_set = LikeUserSerializer(many=True, read_only=True)
+    is_like = serializers.SerializerMethodField("is_like_field")
+
+    def is_like_field(self, post):
+        if "request" in self.context:
+            user = self.context["request"].user
+            return post.like_user_set.filter(pk=user.pk).exists()
+        return False
 
     class Meta:
         model = Post
@@ -39,5 +46,6 @@ class PostSerializer(serializers.ModelSerializer):
             "photo",
             "caption",
             "location",
-            "like_user_set",
+            # "like_user_set",
+            "is_like",
         ]

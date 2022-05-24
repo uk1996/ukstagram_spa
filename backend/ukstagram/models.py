@@ -23,7 +23,7 @@ class Post(TimestampedModel):
         upload_to="ukstagram/post/%Y/%m/%d",
         processors=[ResizeToFill(512, 512)],
         format="JPEG",
-        options={"quality": 100},
+        options={"quality": 60},
     )
     caption = models.TextField()
     tag_set = models.ManyToManyField("Tag", blank=True)

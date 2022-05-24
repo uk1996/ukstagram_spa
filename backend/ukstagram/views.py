@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from django.utils import timezone
 import datetime
 
@@ -27,6 +29,11 @@ class PostViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = PostPagePagination
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
+
     def get_queryset(self):
         # timesince = timezone.now() - datetime.timedelta(days=3)
         qs = super().get_queryset()
@@ -48,6 +55,18 @@ class PostViewSet(ModelViewSet):
         post.caption = post.remove_tag_in_caption()
         post.save()
 
+    @action(detail=True, methods=["PATCH"])
+    def like(self, requset, pk):
+        post = self.get_object()
+        post.like_user_set.add(self.request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @like.mapping.delete
+    def unlike(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.remove(self.request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(["POST"])
 def user_page(request):
@@ -55,6 +74,8 @@ def user_page(request):
     user = get_object_or_404(User, username=username)
     user_serializer = UserSerializer(instance=user)
     postList = Post.objects.filter(author=user)
-    postList_serializer = PostSerializer(instance=postList, many=True)
+    postList_serializer = PostSerializer(
+        instance=postList, many=True, context={"request": request}
+    )
     responseData = {"user": user_serializer.data, "postList": postList_serializer.data}
     return Response(responseData)

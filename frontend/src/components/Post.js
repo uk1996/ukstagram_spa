@@ -1,21 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Avatar } from 'antd';
 import './Post.scss';
-import { HeartOutlined, UserOutlined } from '@ant-design/icons';
+import { HeartOutlined, HeartFilled, UserOutlined } from '@ant-design/icons';
 import { useUrlContext } from '../utils/UrlProvider';
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
+import { useAppContext } from '../store';
 
 const Post = ({ post }) => {
-    const { author, photo, caption } = post;
+    const { pk, author, photo, caption, is_like } = post;
     const { username, avatar_url } = author;
     const avatarUrl = useUrlContext().defaulturl + avatar_url;
+    const [isLike, setIsLike] = useState(is_like);
+    const {
+        store: { jwtToken },
+    } = useAppContext();
+    const defaultUrl = useUrlContext().defaulturl;
+
+    const handleClcik = () => {
+        const method = isLike ? 'DELETE' : 'PATCH';
+        const apiUrl = defaultUrl + `/api/posts/${pk}/like/`;
+        const headers = { Authorization: `Bearer ${jwtToken}` };
+        Axios({
+            url: apiUrl,
+            method,
+            headers,
+        }).then(() => {
+            setIsLike(!isLike);
+        });
+    };
 
     return (
         <Card
             className="post"
             hoverable
             cover={<img src={photo} alt={caption} />}
-            actions={[<HeartOutlined />]}
+            actions={[
+                <div onClick={handleClcik}>
+                    {isLike ? (
+                        <HeartFilled style={{ color: '#FF6666' }} />
+                    ) : (
+                        <HeartOutlined />
+                    )}
+                </div>,
+            ]}
         >
             <Card.Meta
                 avatar={
