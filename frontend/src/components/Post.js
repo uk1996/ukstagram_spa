@@ -18,7 +18,7 @@ const Post = ({ post }) => {
     const defaultUrl = useUrlContext().defaulturl;
 
     const handleClcik = () => {
-        const method = isLike ? 'DELETE' : 'PATCH';
+        const method = isLike ? 'DELETE' : 'POST';
         const apiUrl = defaultUrl + `/api/posts/${pk}/like/`;
         const headers = { Authorization: `Bearer ${jwtToken}` };
         Axios({

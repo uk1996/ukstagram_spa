@@ -5,8 +5,9 @@ import { useUrlContext } from '../../utils/UrlProvider';
 import { useAppContext } from '../../store';
 import './Profile.scss';
 import UserAvatar from '../../components/UserAvatar';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Modal } from 'antd';
 import { useMyUserContext } from '../../utils/MyUserProvider';
+import UserList from '../../components/UserList';
 
 const Profile = ({ location }) => {
     const defaultUrl = useUrlContext().defaulturl;
@@ -21,6 +22,26 @@ const Profile = ({ location }) => {
     const [isFollow, setIsFollow] = useState();
     const { myUser } = useMyUserContext();
     const [postList, setPostList] = useState();
+    const [buttonKinds, setButtonKinds] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
+    const followingClick = () => {
+        setButtonKinds('following');
+        showModal();
+    };
+
+    const followerClick = () => {
+        setButtonKinds('follower');
+        showModal();
+    };
 
     useEffect(() => {
         setUserName(location.pathname.split('/').at(-1));
@@ -77,6 +98,8 @@ const Profile = ({ location }) => {
         }
     }, [requestUerPage, jwtToken, username, unFollowUrl]);
 
+    console.log(postList);
+
     return (
         <AppLayout contentwidth="100%">
             {username && user && postList && (
@@ -103,13 +126,24 @@ const Profile = ({ location }) => {
                             <div style={{ width: '60%', marginBottom: '3%' }}>
                                 <Row gutter={0}>
                                     <Col className="gutter-row" span={8}>
-                                        게시물 {postList.length}
+                                        <div>게시물 {postList.length}</div>
                                     </Col>
                                     <Col className="gutter-row" span={8}>
-                                        팔로워 {user.follower_set.length}
+                                        <div
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={followerClick}
+                                        >
+                                            팔로워 {user.follower_set.length}
+                                        </div>
                                     </Col>
-                                    <Col className="gutter-row" span={8}>
-                                        팔로잉 {user.following_set.length}
+                                    <Col
+                                        className="gutter-row"
+                                        span={8}
+                                        onClick={followingClick}
+                                    >
+                                        <div style={{ cursor: 'pointer' }}>
+                                            팔로잉 {user.following_set.length}
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -146,7 +180,7 @@ const Profile = ({ location }) => {
                                         >
                                             <img
                                                 style={{ width: '100%' }}
-                                                src={defaultUrl + post.photo}
+                                                src={post.photo}
                                                 alt=""
                                             />
                                         </div>
@@ -155,6 +189,35 @@ const Profile = ({ location }) => {
                             })}
                         </Row>
                     </div>
+                    {user && buttonKinds === 'following' ? (
+                        <Modal
+                            footer={null}
+                            title="팔로잉"
+                            visible={isModalVisible}
+                            onCancel={handleCancel}
+                            width={280}
+                        >
+                            <UserList
+                                requestUerPage={requestUerPage}
+                                userList={user.following_set}
+                                kind="following"
+                            />
+                        </Modal>
+                    ) : (
+                        <Modal
+                            footer={null}
+                            title="팔로워"
+                            visible={isModalVisible}
+                            onCancel={handleCancel}
+                            width={280}
+                        >
+                            <UserList
+                                requestUerPage={requestUerPage}
+                                userList={user.follower_set}
+                                kind="follower"
+                            />
+                        </Modal>
+                    )}
                 </>
             )}
         </AppLayout>

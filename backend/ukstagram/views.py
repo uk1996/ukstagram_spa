@@ -55,7 +55,7 @@ class PostViewSet(ModelViewSet):
         post.caption = post.remove_tag_in_caption()
         post.save()
 
-    @action(detail=True, methods=["PATCH"])
+    @action(detail=True, methods=["POST"])
     def like(self, requset, pk):
         post = self.get_object()
         post.like_user_set.add(self.request.user)
