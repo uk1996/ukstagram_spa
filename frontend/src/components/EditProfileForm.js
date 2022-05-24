@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import { useMyUserContext } from '../utils/MyUserProvider';
 import { Form, Upload, Input, Button, Modal } from 'antd';
-import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { getBase64FromFile } from '../utils/base64';
 import { useUrlContext } from '../utils/UrlProvider';
 
 const EditProfileForm = () => {
     const { myUser } = useMyUserContext();
     const [fieldErrors, setFieldErrors] = useState({});
-    const [fileList, setFileList] = useState([]);
     const [previewPhoto, setPreviewPhoto] = useState({
         visible: false,
         base64: null,
     });
     const defaultUrl = useUrlContext().defaulturl;
+
+    const [fileList, setFileList] = useState([
+        {
+            uid: '-1',
+            name: 'image.png',
+            status: 'done',
+            url: defaultUrl + myUser.avatar_url,
+        },
+    ]);
 
     const handleFinish = () => {};
     const handleFinishFailed = () => {};
@@ -56,7 +64,6 @@ const EditProfileForm = () => {
                 {...fieldErrors.photo}
             >
                 <Upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     listType="picture-card"
                     fileList={fileList}
                     beforeUpload={() => {
