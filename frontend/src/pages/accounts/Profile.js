@@ -98,8 +98,6 @@ const Profile = ({ location }) => {
         }
     }, [requestUerPage, jwtToken, username, unFollowUrl]);
 
-    console.log(postList);
-
     return (
         <AppLayout contentwidth="100%">
             {username && user && postList && (
