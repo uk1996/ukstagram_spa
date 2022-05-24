@@ -12,12 +12,19 @@ class FollowSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    following_set = FollowSerializer(many=True)
-    follower_set = FollowSerializer(many=True)
+    following_set = FollowSerializer(many=True, read_only=True)
+    follower_set = FollowSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ["pk", "username", "avatar_url", "following_set", "follower_set"]
+        fields = [
+            "pk",
+            "username",
+            "avatar",
+            "avatar_url",
+            "following_set",
+            "follower_set",
+        ]
 
 
 class SignupSerializer(serializers.ModelSerializer):
