@@ -8,6 +8,7 @@ import UserAvatar from '../../components/UserAvatar';
 import { Row, Col, Button, Modal } from 'antd';
 import { useMyUserContext } from '../../utils/MyUserProvider';
 import UserList from '../../components/UserList';
+import EditProfileLogo from '../../components/EditProfileLogo';
 
 const Profile = ({ location }) => {
     const defaultUrl = useUrlContext().defaulturl;
@@ -116,10 +117,20 @@ const Profile = ({ location }) => {
                                         fontSize: '200%',
                                         fontWeight: '500',
                                         marginBottom: '2%',
+                                        display: 'inline',
                                     }}
                                 >
                                     {username}
                                 </p>
+                                {myUser.username === username && (
+                                    <EditProfileLogo
+                                        size="large"
+                                        style={{
+                                            marginLeft: '2%',
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                )}
                             </div>
                             <div style={{ width: '60%', marginBottom: '3%' }}>
                                 <Row gutter={0}>
