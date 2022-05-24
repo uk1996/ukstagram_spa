@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMyUserContext } from '../utils/MyUserProvider';
 import { Form, Upload, Input, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -14,19 +14,24 @@ const EditProfileForm = () => {
     });
     const defaultUrl = useUrlContext().defaulturl;
 
-    const [fileList, setFileList] = useState([
-        {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: defaultUrl + myUser.avatar_url,
-        },
-    ]);
+    const [fileList, setFileList] = useState([]);
+
+    useEffect(() => {
+        if (myUser.avatar) {
+            setFileList([
+                {
+                    uid: '-1',
+                    name: 'image.png',
+                    status: 'done',
+                    url: defaultUrl + myUser.avatar_url,
+                },
+            ]);
+        }
+    }, [myUser, defaultUrl]);
 
     const handleFinish = () => {};
     const handleFinishFailed = () => {};
     const handleUploadChange = ({ fileList }) => {
-        console.log(fileList);
         setFileList(fileList);
     };
     const handlePreviewPhoto = async (file) => {
@@ -39,7 +44,6 @@ const EditProfileForm = () => {
             base64: file.url || file.preview,
         });
     };
-    console.log(myUser.avatar);
 
     return (
         <Form
