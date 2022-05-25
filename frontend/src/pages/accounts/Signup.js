@@ -24,11 +24,17 @@ const Signup = () => {
     }, [dispatch, isAuthenticated]);
 
     const onFinish = (values) => {
-        const { username, password, password_confirm, introduction } = values;
+        const { username, password, password_confirm } = values;
+        let { introduction } = values;
 
         setFieldErrors({});
 
+        if (typeof introduction === 'undefined') {
+            introduction = '';
+        }
+
         const data = { username, password, password_confirm, introduction };
+
         Axios.post(apiUrl, data)
             .then((response) => {
                 notification.open({
@@ -122,7 +128,7 @@ const Signup = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Password_Confirm"
+                        label="Password Confirm"
                         name="password_confirm"
                         rules={[
                             {

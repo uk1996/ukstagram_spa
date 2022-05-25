@@ -128,7 +128,7 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
             autoComplete="off"
         >
             <Form.Item
-                label="avatar"
+                label="Avatar"
                 name="avatar"
                 hasFeedback
                 {...fieldErrors.avatar}
@@ -152,7 +152,7 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
             </Form.Item>
 
             <Form.Item
-                label="introduction"
+                label="Introduction"
                 name="introduction"
                 initialValue={myUser.introduction}
                 {...fieldErrors.introduction}
@@ -165,7 +165,7 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
             </Form.Item>
 
             <Form.Item
-                label="first_name"
+                label="First Name"
                 name="first_name"
                 initialValue={myUser.first_name}
                 {...fieldErrors.first_name}
@@ -174,7 +174,7 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
             </Form.Item>
 
             <Form.Item
-                label="last_name"
+                label="Last Name"
                 name="last_name"
                 initialValue={myUser.last_name}
                 {...fieldErrors.last_name}
@@ -183,7 +183,7 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
             </Form.Item>
 
             <Form.Item
-                label="email"
+                label="Email"
                 name="email"
                 initialValue={myUser.email}
                 {...fieldErrors.email}
@@ -192,7 +192,7 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
             </Form.Item>
 
             <Form.Item
-                label="website_url"
+                label="Website Url"
                 name="website_url"
                 initialValue={myUser.website_url}
                 {...fieldErrors.website_url}
@@ -201,7 +201,7 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
             </Form.Item>
 
             <Form.Item
-                label="phone_number"
+                label="Phone Number"
                 name="phone_number"
                 initialValue={myUser.phone_number}
                 {...fieldErrors.phone_number}
