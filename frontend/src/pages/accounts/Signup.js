@@ -24,11 +24,11 @@ const Signup = () => {
     }, [dispatch, isAuthenticated]);
 
     const onFinish = (values) => {
-        const { username, password } = values;
+        const { username, password, password_confirm, introduction } = values;
 
         setFieldErrors({});
 
-        const data = { username, password };
+        const data = { username, password, password_confirm, introduction };
         Axios.post(apiUrl, data)
             .then((response) => {
                 notification.open({
@@ -102,6 +102,7 @@ const Signup = () => {
                     >
                         <Input name="username" />
                     </Form.Item>
+
                     <Form.Item
                         label="Password"
                         name="password"
@@ -119,6 +120,37 @@ const Signup = () => {
                     >
                         <Input.Password name="password" />
                     </Form.Item>
+
+                    <Form.Item
+                        label="Password_Confirm"
+                        name="password_confirm"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                            {
+                                min: 8,
+                                message: '8자리 이상을 입력하세요.',
+                            },
+                        ]}
+                        {...fieldErrors.password_confirm}
+                    >
+                        <Input.Password name="password_confirm" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Introduction"
+                        name="introduction"
+                        {...fieldErrors.introduction}
+                    >
+                        <Input.TextArea
+                            rows={2}
+                            placeholder="최대 30글자"
+                            maxLength={30}
+                        />
+                    </Form.Item>
+
                     <Form.Item
                         wrapperCol={{
                             offset: 8,

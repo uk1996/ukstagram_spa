@@ -1,6 +1,6 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
 from django.contrib.auth import get_user_model
-
+from rest_framework.response import Response
 
 User = get_user_model()
 
@@ -35,13 +35,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    password_confirm = serializers.CharField(write_only=True, required=True)
 
     def create(self, validated_data):
-        user = User.objects.create(username=validated_data["username"])
+        user = User.objects.create(
+            username=validated_data["username"],
+            introduction=validated_data["introduction"],
+        )
         user.set_password(validated_data["password"])
         user.save()
         return user
 
     class Meta:
         model = User
-        fields = ["pk", "username", "password"]
+        fields = ["pk", "username", "password", "password_confirm", "introduction"]

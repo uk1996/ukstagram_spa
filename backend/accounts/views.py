@@ -47,6 +47,22 @@ class Signup(CreateAPIView):
     serializer_class = SignupSerializer
     permission_classes = [permissions.AllowAny]
 
+    def create(self, request, *args, **kwargs):
+        password = request.data["password"]
+        password_confirm = request.data["password_confirm"]
+        if password != password_confirm:
+            return Response(
+                {"password_confirm": ["두 비밀번호가 일치하지 않습니다"]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
 
 class SuggestionAPIView(ListAPIView):
     queryset = User.objects.all()
