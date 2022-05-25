@@ -64,8 +64,6 @@ const Signup = () => {
                 }
             })
             .finally(() => {});
-
-        console.log('Success:', values);
     };
 
     const onFinishFailed = (errorInfo) => {

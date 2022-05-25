@@ -3,7 +3,7 @@ import { Modal } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import EditProfileForm from './EditProfileForm';
 
-const EditProfileLogo = ({ style }) => {
+const EditProfileLogo = ({ style, requestUerPage }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -23,7 +23,10 @@ const EditProfileLogo = ({ style }) => {
                 visible={isModalVisible}
                 onCancel={handleCancel}
             >
-                <EditProfileForm />
+                <EditProfileForm
+                    setIsModalVisible={setIsModalVisible}
+                    requestUerPage={requestUerPage}
+                />
             </Modal>
         </div>
     );

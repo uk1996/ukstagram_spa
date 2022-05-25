@@ -1,31 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import Axios from 'axios';
+import React from 'react';
 import { useUrlContext } from '../utils/UrlProvider';
-import { useAppContext } from '../store';
 import { Avatar } from 'antd';
+import { useMyUserContext } from '../utils/MyUserProvider';
 
 const MyImage = ({ size }) => {
-    const [avatarUrl, setAvatarUrl] = useState();
-    const apiUrl = useUrlContext().defaulturl + '/accounts/users/me/';
-    const {
-        store: { jwtToken },
-    } = useAppContext();
-
-    useEffect(() => {
-        const headers = { Authorization: `Bearer ${jwtToken}` };
-        Axios.get(apiUrl, { headers })
-            .then((response) => {
-                setAvatarUrl(response.data.avatar_url);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [jwtToken, apiUrl]);
+    const { myUser } = useMyUserContext();
+    const defaulturl = useUrlContext().defaulturl;
 
     return (
         <Avatar
             size={size}
-            icon={<img src={useUrlContext().defaulturl + avatarUrl} alt="my" />}
+            icon={<img src={defaulturl + myUser.avatar_url} alt="" />}
         />
     );
 };

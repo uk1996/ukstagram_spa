@@ -9,7 +9,6 @@ import { useUrlContext } from '../../utils/UrlProvider';
 import { Link } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
 import { parseErrorMessage } from '../../utils/forms';
-
 const Login = () => {
     const {
         store: { isAuthenticated },
@@ -31,7 +30,7 @@ const Login = () => {
             <div>
                 <Redirect
                     to={{
-                        pathname: '/accounts/profile/',
+                        pathname: '/',
                         state: { from: '/accounts/login/' },
                     }}
                 />

@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useMyUserContext } from '../utils/MyUserProvider';
-import { Form, Upload, Input, Button, Modal } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Form, Upload, Input, Button, Modal, notification } from 'antd';
+import { PlusOutlined, SmileOutlined } from '@ant-design/icons';
 import { getBase64FromFile } from '../utils/base64';
 import { useUrlContext } from '../utils/UrlProvider';
+import Axios from 'axios';
+import { useAppContext } from '../store';
+import { parseErrorMessage } from '../utils/forms';
 
-const EditProfileForm = () => {
-    const { myUser } = useMyUserContext();
+const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
+    const { myUser, setMyUser } = useMyUserContext();
     const [fieldErrors, setFieldErrors] = useState({});
     const [previewPhoto, setPreviewPhoto] = useState({
         visible: false,
         base64: null,
     });
     const defaultUrl = useUrlContext().defaulturl;
-
     const [fileList, setFileList] = useState([]);
+    const {
+        store: { jwtToken },
+    } = useAppContext();
 
     useEffect(() => {
         if (myUser.avatar) {
@@ -23,13 +28,74 @@ const EditProfileForm = () => {
                     uid: '-1',
                     name: 'image.png',
                     status: 'done',
-                    url: defaultUrl + myUser.avatar_url,
+                    url: myUser.avatar,
                 },
             ]);
         }
     }, [myUser, defaultUrl]);
 
-    const handleFinish = () => {};
+    const handleFinish = (fieldValues) => {
+        const {
+            avatar,
+            introduction,
+            first_name,
+            last_name,
+            email,
+            website_url,
+            phone_number,
+        } = fieldValues;
+
+        console.log(fieldValues);
+
+        const headers = { Authorization: `Bearer ${jwtToken}` };
+
+        const formData = new FormData();
+        formData.append('introduction', introduction);
+        formData.append('first_name', first_name);
+        formData.append('last_name', last_name);
+        formData.append('email', email);
+        formData.append('website_url', website_url);
+        formData.append('phone_number', phone_number);
+
+        if (avatar) {
+            const { fileList } = avatar;
+
+            if (fileList.length > 0) {
+                fileList.forEach((file) => {
+                    formData.append('avatar', file.originFileObj);
+                });
+            } else {
+                formData.append('avatar', null);
+            }
+        }
+
+        Axios.patch(defaultUrl + `/accounts/users/${myUser.pk}/`, formData, {
+            headers,
+        })
+            .then(() => {
+                notification.open({
+                    message: '프로필 수정 완료',
+                    icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+                });
+                setIsModalVisible(false);
+                requestUerPage({ headers });
+                Axios.get(defaultUrl + '/accounts/users/me/', { headers })
+                    .then((response) => {
+                        setMyUser(response.data);
+                    })
+                    .catch((error) => {
+                        console.log(error.response);
+                    });
+            })
+            .catch((error) => {
+                const { status, data: fieldErrorMessages } = error.response;
+                if (typeof fieldErrorMessages === 'string') {
+                    console.log(`Error) ${status} response`);
+                } else {
+                    setFieldErrors(parseErrorMessage(fieldErrorMessages));
+                }
+            });
+    };
     const handleFinishFailed = () => {};
     const handleUploadChange = ({ fileList }) => {
         setFileList(fileList);
@@ -65,7 +131,7 @@ const EditProfileForm = () => {
                 label="avatar"
                 name="avatar"
                 hasFeedback
-                {...fieldErrors.photo}
+                {...fieldErrors.avatar}
             >
                 <Upload
                     listType="picture-card"
@@ -86,18 +152,55 @@ const EditProfileForm = () => {
             </Form.Item>
 
             <Form.Item
-                label="username"
-                name="username"
-                initialValue={myUser.username}
-                rules={[
-                    {
-                        required: true,
-                        message: 'username을 입력해주세요.',
-                    },
-                ]}
-                hasFeedback
-                {...fieldErrors.caption}
-                {...fieldErrors.non_field_errors} // 두개 이상의 필드에 걸친 에러
+                label="introduction"
+                name="introduction"
+                initialValue={myUser.introduction}
+                {...fieldErrors.introduction}
+            >
+                <Input.TextArea rows={4} />
+            </Form.Item>
+
+            <Form.Item
+                label="first_name"
+                name="first_name"
+                initialValue={myUser.first_name}
+                {...fieldErrors.first_name}
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item
+                label="last_name"
+                name="last_name"
+                initialValue={myUser.last_name}
+                {...fieldErrors.last_name}
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item
+                label="email"
+                name="email"
+                initialValue={myUser.email}
+                {...fieldErrors.email}
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item
+                label="website_url"
+                name="website_url"
+                initialValue={myUser.website_url}
+                {...fieldErrors.website_url}
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item
+                label="phone_number"
+                name="phone_number"
+                initialValue={myUser.phone_number}
+                {...fieldErrors.phone_number}
             >
                 <Input />
             </Form.Item>

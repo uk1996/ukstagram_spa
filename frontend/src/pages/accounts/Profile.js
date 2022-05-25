@@ -124,6 +124,7 @@ const Profile = ({ location }) => {
                                 </p>
                                 {myUser.username === username && (
                                     <EditProfileLogo
+                                        requestUerPage={requestUerPage}
                                         size="large"
                                         style={{
                                             marginLeft: '2%',

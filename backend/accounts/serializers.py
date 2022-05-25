@@ -24,6 +24,12 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar_url",
             "following_set",
             "follower_set",
+            "introduction",
+            "first_name",
+            "last_name",
+            "email",
+            "website_url",
+            "phone_number",
         ]
 
 
