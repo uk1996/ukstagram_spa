@@ -157,7 +157,11 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
                 initialValue={myUser.introduction}
                 {...fieldErrors.introduction}
             >
-                <Input.TextArea rows={4} />
+                <Input.TextArea
+                    rows={2}
+                    placeholder="최대 30글자"
+                    maxLength={30}
+                />
             </Form.Item>
 
             <Form.Item

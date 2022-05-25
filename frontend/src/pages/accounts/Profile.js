@@ -118,6 +118,7 @@ const Profile = ({ location }) => {
                                         fontWeight: '500',
                                         marginBottom: '2%',
                                         display: 'inline',
+                                        marginRight: '2%',
                                     }}
                                 >
                                     {username}
@@ -127,23 +128,59 @@ const Profile = ({ location }) => {
                                         requestUerPage={requestUerPage}
                                         size="large"
                                         style={{
-                                            marginLeft: '2%',
                                             cursor: 'pointer',
                                         }}
                                     />
                                 )}
+                                {myUser.username !== username && (
+                                    <div
+                                        style={{
+                                            display: 'inline',
+                                            position: 'relative',
+                                            bottom: '5px',
+                                        }}
+                                    >
+                                        {isFollow && (
+                                            <Button onClick={unFollowClick}>
+                                                UnFollow
+                                            </Button>
+                                        )}
+                                        {!isFollow && (
+                                            <Button onClick={followClick}>
+                                                Follow
+                                            </Button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                            <div style={{ width: '60%', marginBottom: '3%' }}>
+                            <div
+                                style={{
+                                    width: '60%',
+                                    paddingBottom: '2%',
+                                    paddingTop: '2%',
+                                }}
+                            >
                                 <Row gutter={0}>
                                     <Col className="gutter-row" span={8}>
-                                        <div>게시물 {postList.length}</div>
+                                        <div>
+                                            <span
+                                                style={{ fontWeight: '1000' }}
+                                            >
+                                                게시물 {postList.length}
+                                            </span>
+                                        </div>
                                     </Col>
                                     <Col className="gutter-row" span={8}>
                                         <div
                                             style={{ cursor: 'pointer' }}
                                             onClick={followerClick}
                                         >
-                                            팔로워 {user.follower_set.length}
+                                            <span
+                                                style={{ fontWeight: '1000' }}
+                                            >
+                                                팔로워{' '}
+                                                {user.follower_set.length}
+                                            </span>
                                         </div>
                                     </Col>
                                     <Col
@@ -152,23 +189,31 @@ const Profile = ({ location }) => {
                                         onClick={followingClick}
                                     >
                                         <div style={{ cursor: 'pointer' }}>
-                                            팔로잉 {user.following_set.length}
+                                            <span
+                                                style={{ fontWeight: '1000' }}
+                                            >
+                                                팔로잉{' '}
+                                                {user.following_set.length}
+                                            </span>
                                         </div>
                                     </Col>
                                 </Row>
                             </div>
-                            {myUser.username !== username && (
-                                <div>
-                                    {isFollow && (
-                                        <Button onClick={unFollowClick}>
-                                            UnFollow
-                                        </Button>
-                                    )}
-                                    {!isFollow && (
-                                        <Button onClick={followClick}>
-                                            Follow
-                                        </Button>
-                                    )}
+                            {user && user.introduction.trim().length > 0 && (
+                                <div
+                                    style={{
+                                        display: 'inline',
+                                        marginRight: '3%',
+                                    }}
+                                >
+                                    <span
+                                        style={{
+                                            fontSize: '15px',
+                                            fontWeight: '500',
+                                        }}
+                                    >
+                                        {user.introduction.trim()}
+                                    </span>
                                 </div>
                             )}
                         </Col>
