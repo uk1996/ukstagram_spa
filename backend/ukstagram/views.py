@@ -59,7 +59,7 @@ class PostViewSet(ModelViewSet):
     def like(self, requset, pk):
         post = self.get_object()
         post.like_user_set.add(self.request.user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_201_CREATED)
 
     @like.mapping.delete
     def unlike(self, request, pk):

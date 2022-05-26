@@ -102,7 +102,7 @@ def user_follow(request):
     follow_username = request.data["username"]
     follow_user = get_object_or_404(User, username=follow_username)
     request.user.following_set.add(follow_user)
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_201_CREATED)
 
 
 @api_view(["POST"])
