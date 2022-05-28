@@ -1,6 +1,7 @@
 from rest_framework import serializers, status
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -34,8 +35,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SignupSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=True)
     password_confirm = serializers.CharField(write_only=True, required=True)
+
+    def validate_password_confirm(self, value):
+        password = self.context["request"].data.get("password")
+        if password != value:
+            raise ValidationError("두 비밀번호가 일치하지 않습니다.")
+        return value
 
     def create(self, validated_data):
         user = User.objects.create(
