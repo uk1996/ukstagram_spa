@@ -1,5 +1,5 @@
 from rest_framework import permissions, status
-from rest_framework.decorators import api_view, action, permission_classes
+from rest_framework.decorators import api_view, action
 from rest_framework.generics import CreateAPIView, ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -54,11 +54,10 @@ class Signup(CreateAPIView):
 
 
 @api_view(["PATCH"])
-@permission_classes([permissions.IsAuthenticated])
-def password_change(request, pk):
-    user = get_object_or_404(User, pk=pk)
+def password_change(request):
+    user = request.user
     serializer = PasswordChangeSerializer(
-        data=request.data, context={"request": request, "user": user}
+        data=request.data, context={"request": request}
     )
     serializer.is_valid(raise_exception=True)
     user.set_password(request.data.get("new_password"))
@@ -100,7 +99,6 @@ class UserSearchAPI(ListAPIView):
 
 
 @api_view(["POST"])
-@permission_classes([permissions.IsAuthenticated])
 def user_follow(request):
     follow_username = request.data["username"]
     follow_user = get_object_or_404(User, username=follow_username)
@@ -109,7 +107,6 @@ def user_follow(request):
 
 
 @api_view(["POST"])
-@permission_classes([permissions.IsAuthenticated])
 def user_unfollow(request):
     unfollow_username = request.data["username"]
     unfollow_user = get_object_or_404(User, username=unfollow_username)

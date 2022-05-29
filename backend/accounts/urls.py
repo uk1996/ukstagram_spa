@@ -14,7 +14,7 @@ router.register("users", views.UserViewSet)
 
 urlpatterns = [
     path("signup/", views.Signup.as_view(), name="signup"),
-    path("<int:pk>/password_change/", views.password_change, name="password_change"),
+    path("password_change/", views.password_change, name="password_change"),
     path("api-jwt-auth/", obtain_jwt_token),
     path("api-jwt-auth/refresh/", refresh_jwt_token),
     path("api-jwt-auth/verify/", verify_jwt_token),
