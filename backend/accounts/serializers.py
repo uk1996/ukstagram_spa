@@ -58,7 +58,7 @@ class SignupSerializer(serializers.ModelSerializer):
         fields = ["pk", "username", "password", "password_confirm", "introduction"]
 
 
-class PasswordChangeSerializer(serializers.ModelSerializer):
+class PasswordChangeSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, required=True)
     new_password = serializers.CharField(write_only=True, required=True)
     new_password_confirm = serializers.CharField(write_only=True, required=True)
@@ -83,4 +83,4 @@ class PasswordChangeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["pk", "old_password", "new_password", "new_password_confirm"]
+        fields = ["old_password", "new_password", "new_password_confirm"]
