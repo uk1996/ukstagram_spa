@@ -1,10 +1,10 @@
 from rest_framework import permissions, status
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.generics import CreateAPIView, ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .serializers import SignupSerializer, UserSerializer
+from .serializers import SignupSerializer, UserSerializer, PasswordChangeSerializer
 from django.contrib.auth import get_user_model
 import random
 from django.db.models import Q
@@ -53,6 +53,19 @@ class Signup(CreateAPIView):
         return context
 
 
+@api_view(["PATCH"])
+@permission_classes([permissions.IsAuthenticated])
+def password_change(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    serializer = PasswordChangeSerializer(
+        data=request.data, context={"request": request, "user": user}
+    )
+    serializer.is_valid(raise_exception=True)
+    user.set_password(request.data.get("new_password"))
+    user.save()
+    return Response("비밀번호가 변경되었습니다.", status=status.HTTP_200_OK)
+
+
 class SuggestionAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -87,6 +100,7 @@ class UserSearchAPI(ListAPIView):
 
 
 @api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
 def user_follow(request):
     follow_username = request.data["username"]
     follow_user = get_object_or_404(User, username=follow_username)
@@ -95,6 +109,7 @@ def user_follow(request):
 
 
 @api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
 def user_unfollow(request):
     unfollow_username = request.data["username"]
     unfollow_user = get_object_or_404(User, username=unfollow_username)

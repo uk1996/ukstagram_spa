@@ -56,3 +56,31 @@ class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["pk", "username", "password", "password_confirm", "introduction"]
+
+
+class PasswordChangeSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(write_only=True, required=True)
+    new_password = serializers.CharField(write_only=True, required=True)
+    new_password_confirm = serializers.CharField(write_only=True, required=True)
+
+    def validate_old_password(self, value):
+        user = self.context["user"]
+        if user.check_password(value) == False:
+            raise ValidationError("현재 비밀번호가 일치하지 않습니다.")
+        return value
+
+    def validate_new_password(self, value):
+        user = self.context["user"]
+        if user.check_password(value) == True:
+            raise ValidationError("새로운 비밀번호와 기존의 비밀번호가 일치합니다.")
+        return value
+
+    def validate_new_password_confirm(self, value):
+        new_password = self.context["request"].data.get("new_password")
+        if new_password != value:
+            raise ValidationError("새로운 두 비밀번호가 일치하지 않습니다.")
+        return value
+
+    class Meta:
+        model = User
+        fields = ["pk", "old_password", "new_password", "new_password_confirm"]
