@@ -82,7 +82,7 @@ class SuggestionAPIView(ListAPIView):
         )
         qs = list(qs)
         # random.shuffle(qs)
-        return qs[:5]
+        return qs[:10]
 
 
 class UserSearchAPI(ListAPIView):
