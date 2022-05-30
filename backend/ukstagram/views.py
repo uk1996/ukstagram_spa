@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAuthorOrReadOnly
 from rest_framework.decorators import action
 from django.utils import timezone
 import datetime
@@ -26,7 +27,7 @@ class PostViewSet(ModelViewSet):
         .prefetch_related("tag_set", "like_user_set")
     )
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthorOrReadOnly]
     pagination_class = PostPagePagination
 
     def get_serializer_context(self):

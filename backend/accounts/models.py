@@ -15,9 +15,7 @@ class User(AbstractUser):
     website_url = models.URLField(blank=True)
     introduction = models.TextField(blank=True)
     phone_number = models.CharField(
-        max_length=13,
-        blank=True,
-        validators=[RegexValidator(r"^010-?\d{4}-?\d{4}$")],
+        max_length=13, blank=True, validators=[RegexValidator(r"^010-?\d{4}-?\d{4}$")],
     )
     gender = models.CharField(max_length=6, blank=True, choices=GenderChoices.choices)
     avatar = models.ImageField(

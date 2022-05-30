@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view, action
 from rest_framework.generics import CreateAPIView, ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from .permissions import IsUserOrReadOnly
 
 from .serializers import SignupSerializer, UserSerializer, PasswordChangeSerializer
 from django.contrib.auth import get_user_model
@@ -17,7 +18,7 @@ User = get_user_model()
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsUserOrReadOnly]
 
     def update(self, request, *args, **kwargs):
         if "avatar" in request.data.keys() and request.data["avatar"] == "null":
