@@ -7,6 +7,7 @@ import { useUrlContext } from '../utils/UrlProvider';
 import Axios from 'axios';
 import { useAppContext } from '../store';
 import { parseErrorMessage } from '../utils/forms';
+import PasswordChangeForm from './PasswordChangeForm';
 
 const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
     const { myUser, setMyUser } = useMyUserContext();
@@ -20,6 +21,13 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
     const {
         store: { jwtToken },
     } = useAppContext();
+    const [showPasswordChangeModal, setShowPasswordChangeModal] =
+        useState(false);
+
+    const PasswordChangeClick = () => {
+        setIsModalVisible(false);
+        setShowPasswordChangeModal(true);
+    };
 
     useEffect(() => {
         if (myUser.avatar) {
@@ -218,6 +226,16 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
                 <Button type="primary" htmlType="submit">
                     수정
                 </Button>
+                <Button
+                    style={{
+                        marginLeft: '0.5rem',
+                        backgroundColor: '#999999',
+                        color: 'white',
+                    }}
+                    onClick={PasswordChangeClick}
+                >
+                    비밀번호 변경
+                </Button>
             </Form.Item>
 
             <Modal
@@ -229,6 +247,17 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
                     src={previewPhoto.base64}
                     style={{ width: '100%' }}
                     alt="Preview"
+                />
+            </Modal>
+
+            <Modal
+                title="비밀번호 변경"
+                visible={showPasswordChangeModal}
+                footer={null}
+                onCancel={() => setShowPasswordChangeModal(false)}
+            >
+                <PasswordChangeForm
+                    setShowPasswordChangeModal={setShowPasswordChangeModal}
                 />
             </Modal>
         </Form>
