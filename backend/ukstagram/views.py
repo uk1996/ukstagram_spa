@@ -11,9 +11,9 @@ import datetime
 from rest_framework.response import Response
 
 from accounts.serializers import UserSerializer
-from .models import Post
+from .models import Post, Comment
 from rest_framework.viewsets import ModelViewSet
-from .serializers import PostSerializer
+from .serializers import PostSerializer, CommentSerializer
 from .pagination import PostPagePagination
 
 User = get_user_model()
@@ -79,3 +79,22 @@ def user_page(request):
     )
     responseData = {"user": user_serializer.data, "postList": postList_serializer.data}
     return Response(responseData)
+
+
+class CommentViewSet(ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        post_pk = self.kwargs["post_pk"]
+        post = get_object_or_404(Post, pk=post_pk)
+        qs = super().get_queryset()
+        qs = qs.filter(
+            post=post
+        )  # post = get_object_or_404(Post, pk=post_pk) 없이 qs.filter(post__pk=post_pk)도 가능
+        return qs
+
+    def perform_create(self, serializer):
+        post_pk = self.kwargs["post_pk"]
+        post = get_object_or_404(Post, pk=post_pk)
+        serializer.save(author=self.request.user, post=post)

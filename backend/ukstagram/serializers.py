@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Post, Tag
+from .models import Post, Tag, Comment
 
 User = get_user_model()
 
@@ -11,10 +11,10 @@ class AuthSerializer(serializers.ModelSerializer):
         fields = ["pk", "username", "name", "avatar_url"]
 
 
-class LikeUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["pk", "username"]
+# class LikeUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ["pk", "username"]
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -49,3 +49,12 @@ class PostSerializer(serializers.ModelSerializer):
             # "like_user_set",
             "is_like",
         ]
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = AuthSerializer(read_only=True)
+    post = PostSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = "__all__"
