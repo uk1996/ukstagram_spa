@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Card, Avatar } from 'antd';
+import { Card, Avatar, Row, Col } from 'antd';
 import './Post.scss';
 import { HeartOutlined, HeartFilled, UserOutlined } from '@ant-design/icons';
 import { useUrlContext } from '../utils/UrlProvider';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import { useAppContext } from '../store';
+import useAxios from 'axios-hooks';
 
 const Post = ({ post }) => {
     const { pk, author, photo, caption, is_like } = post;
@@ -16,11 +17,17 @@ const Post = ({ post }) => {
         store: { jwtToken },
     } = useAppContext();
     const defaultUrl = useUrlContext().defaulturl;
+    const headers = { Authorization: `Bearer ${jwtToken}` };
+
+    const [{ data: commentList }, refetch] = useAxios({
+        url: defaultUrl + `/api/posts/${pk}/comments/`,
+        headers,
+    });
 
     const handleClcik = () => {
         const method = isLike ? 'DELETE' : 'POST';
         const apiUrl = defaultUrl + `/api/posts/${pk}/like/`;
-        const headers = { Authorization: `Bearer ${jwtToken}` };
+
         Axios({
             url: apiUrl,
             method,
@@ -44,9 +51,8 @@ const Post = ({ post }) => {
                     )}
                 </div>,
             ]}
-        >
-            <Card.Meta
-                avatar={
+            title={
+                <>
                     <Link to={'/accounts/profile/' + username}>
                         <Avatar
                             hoverable="true"
@@ -56,21 +62,33 @@ const Post = ({ post }) => {
                             }
                         />
                     </Link>
-                }
-                title={
                     <Link
                         to={'/accounts/profile/' + username}
-                        style={{ color: 'black' }}
+                        style={{ color: 'black', marginLeft: '0.5rem' }}
                     >
                         {username}
                     </Link>
-                }
-                description={
+                </>
+            }
+        >
+            <Row>
+                <Col span={4}>
+                    <Link
+                        to={'/accounts/profile/' + username}
+                        style={{ color: 'black', fontWeight: '500' }}
+                    >
+                        {username}
+                    </Link>
+                </Col>
+                <Col span={16}>
                     <span style={{ color: 'black', opacity: '0.85' }}>
                         {caption}
                     </span>
-                }
-            />
+                </Col>
+                <Col span={4} style={{ textAlign: 'right' }}>
+                    하트표시
+                </Col>
+            </Row>
         </Card>
     );
 };
