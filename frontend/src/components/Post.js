@@ -80,13 +80,10 @@ const Post = ({ post }) => {
                         {username}
                     </Link>
                 </Col>
-                <Col span={16}>
+                <Col span={20}>
                     <span style={{ color: 'black', opacity: '0.85' }}>
                         {caption}
                     </span>
-                </Col>
-                <Col span={4} style={{ textAlign: 'right' }}>
-                    하트표시
                 </Col>
             </Row>
         </Card>
