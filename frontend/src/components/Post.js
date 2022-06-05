@@ -86,6 +86,32 @@ const Post = ({ post }) => {
                     </span>
                 </Col>
             </Row>
+
+            {commentList &&
+                commentList.map((comment) => {
+                    return (
+                        <Row>
+                            <Col span={4}>
+                                <Link
+                                    to={'/accounts/profile/' + username}
+                                    style={{
+                                        color: 'black',
+                                        fontWeight: '500',
+                                    }}
+                                >
+                                    {comment.author.username}
+                                </Link>
+                            </Col>
+                            <Col span={20}>
+                                <span
+                                    style={{ color: 'black', opacity: '0.85' }}
+                                >
+                                    {comment.message}
+                                </span>
+                            </Col>
+                        </Row>
+                    );
+                })}
         </Card>
     );
 };
