@@ -20,7 +20,7 @@ const Post = ({ post }) => {
     const headers = { Authorization: `Bearer ${jwtToken}` };
 
     const [{ data: commentList }, refetch] = useAxios({
-        url: defaultUrl + `/api/posts/${pk}/comments/`,
+        url: defaultUrl + `/api/posts/${pk}/comments/?count=2`,
         headers,
     });
 

@@ -9,7 +9,6 @@ from .serializers import SignupSerializer, UserSerializer, PasswordChangeSeriali
 from django.contrib.auth import get_user_model
 import random
 from django.db.models import Q
-from .pagination import UserSerarchPagination
 
 
 User = get_user_model()

@@ -92,6 +92,9 @@ class CommentViewSet(ModelViewSet):
         qs = qs.filter(
             post=post
         )  # post = get_object_or_404(Post, pk=post_pk) 없이 qs.filter(post__pk=post_pk)도 가능
+        count = self.request.query_params.get("count", "")
+        if count:
+            return qs[: int(count)]
         return qs
 
     def perform_create(self, serializer):
