@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Card, Avatar, Row, Col } from 'antd';
 import './Post.scss';
-import { HeartOutlined, HeartFilled, UserOutlined } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 import { useUrlContext } from '../utils/UrlProvider';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import { useAppContext } from '../store';
 import useAxios from 'axios-hooks';
+import Heart from './Heart';
+import HeartFilled from './HeartFilled';
+import Comment from './Comment';
 
 const Post = ({ post }) => {
     const { pk, author, photo, caption, is_like } = post;
@@ -20,7 +23,7 @@ const Post = ({ post }) => {
     const headers = { Authorization: `Bearer ${jwtToken}` };
 
     const [{ data: commentList }, refetch] = useAxios({
-        url: defaultUrl + `/api/posts/${pk}/comments/?count=2`,
+        url: defaultUrl + `/api/posts/${pk}/comments/`,
         headers,
     });
 
@@ -42,15 +45,6 @@ const Post = ({ post }) => {
             className="post"
             hoverable
             cover={<img src={photo} alt={caption} />}
-            actions={[
-                <div onClick={handleClcik}>
-                    {isLike ? (
-                        <HeartFilled style={{ color: '#FF6666' }} />
-                    ) : (
-                        <HeartOutlined />
-                    )}
-                </div>,
-            ]}
             title={
                 <>
                     <Link to={'/accounts/profile/' + username}>
@@ -70,28 +64,42 @@ const Post = ({ post }) => {
                     </Link>
                 </>
             }
+            bodyStyle={{
+                paddingTop: '3px',
+                paddingBottom: '0px',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+            }}
         >
             <Row>
-                <Col span={4}>
+                <Col span={1.5}>
+                    <div onClick={handleClcik}>
+                        {isLike ? <HeartFilled /> : <Heart />}
+                    </div>
+                </Col>
+            </Row>
+
+            <div>
+                <div style={{ display: 'inline' }}>
                     <Link
                         to={'/accounts/profile/' + username}
                         style={{ color: 'black', fontWeight: '500' }}
                     >
-                        {username}
+                        <span>{username}</span>
                     </Link>
-                </Col>
-                <Col span={20}>
+                </div>
+                <div style={{ display: 'inline', marginLeft: '0.5rem' }}>
                     <span style={{ color: 'black', opacity: '0.85' }}>
-                        {caption}
+                        <span>{caption}</span>
                     </span>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
             {commentList &&
                 commentList.map((comment) => {
                     return (
-                        <Row>
-                            <Col span={4}>
+                        <div key={comment.id}>
+                            <div style={{ display: 'inline' }}>
                                 <Link
                                     to={'/accounts/profile/' + username}
                                     style={{
@@ -99,19 +107,29 @@ const Post = ({ post }) => {
                                         fontWeight: '500',
                                     }}
                                 >
-                                    {comment.author.username}
+                                    <span>{comment.author.username}</span>
                                 </Link>
-                            </Col>
-                            <Col span={20}>
+                            </div>
+                            <div
+                                style={{
+                                    display: 'inline',
+                                    marginLeft: '0.5rem',
+                                }}
+                            >
                                 <span
-                                    style={{ color: 'black', opacity: '0.85' }}
+                                    style={{
+                                        color: 'black',
+                                        opacity: '0.85',
+                                    }}
                                 >
-                                    {comment.message}
+                                    <span>{comment.message}</span>
                                 </span>
-                            </Col>
-                        </Row>
+                            </div>
+                        </div>
                     );
                 })}
+            <hr style={{ opacity: '0.5' }} />
+            <Comment postPk={pk} refetch={refetch} />
         </Card>
     );
 };

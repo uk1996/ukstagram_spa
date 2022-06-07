@@ -61,7 +61,7 @@ class Comment(TimestampedModel):
     message = models.TextField()
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["id"]
 
     def __str__(self):
         return self.message
