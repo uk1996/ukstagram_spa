@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Card, Avatar, Row, Col } from 'antd';
+import { Card, Avatar, Row, Col, Modal, Button } from 'antd';
 import './Post.scss';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useUrlContext } from '../utils/UrlProvider';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
@@ -10,6 +10,7 @@ import useAxios from 'axios-hooks';
 import Heart from './Heart';
 import HeartFilled from './HeartFilled';
 import Comment from './Comment';
+import { useMyUserContext } from '../utils/MyUserProvider';
 
 const Post = ({ post }) => {
     const { pk, author, photo, caption, is_like } = post;
@@ -21,6 +22,8 @@ const Post = ({ post }) => {
     } = useAppContext();
     const defaultUrl = useUrlContext().defaulturl;
     const headers = { Authorization: `Bearer ${jwtToken}` };
+    const { myUser } = useMyUserContext();
+    const [postDeleteModalVisible, setPostDeleteModalVisible] = useState(false);
 
     const [{ data: commentList }, refetch] = useAxios({
         url: defaultUrl + `/api/posts/${pk}/comments/`,
@@ -41,96 +44,170 @@ const Post = ({ post }) => {
     };
 
     return (
-        <Card
-            className="post"
-            hoverable
-            cover={<img src={photo} alt={caption} />}
-            title={
-                <>
-                    <Link to={'/accounts/profile/' + username}>
-                        <Avatar
-                            hoverable="true"
-                            size="large"
-                            icon={
-                                <img src={avatarUrl} alt={<UserOutlined />} />
-                            }
-                        />
-                    </Link>
-                    <Link
-                        to={'/accounts/profile/' + username}
-                        style={{ color: 'black', marginLeft: '0.5rem' }}
-                    >
-                        {username}
-                    </Link>
-                </>
-            }
-            bodyStyle={{
-                paddingTop: '3px',
-                paddingBottom: '0px',
-                paddingLeft: '10px',
-                paddingRight: '10px',
-            }}
-        >
-            <Row>
-                <Col span={1.5}>
-                    <div onClick={handleClcik}>
-                        {isLike ? <HeartFilled /> : <Heart />}
+        <>
+            <Card
+                className="post"
+                hoverable
+                cover={<img src={photo} alt={caption} />}
+                title={
+                    <div>
+                        <Link to={'/accounts/profile/' + username}>
+                            <Avatar
+                                hoverable="true"
+                                size="large"
+                                icon={
+                                    <img
+                                        src={avatarUrl}
+                                        alt={<UserOutlined />}
+                                    />
+                                }
+                            />
+                        </Link>
+                        <Link
+                            to={'/accounts/profile/' + username}
+                            style={{ color: 'black', marginLeft: '0.5rem' }}
+                        >
+                            {username}
+                        </Link>
                     </div>
-                </Col>
-            </Row>
-
-            <div>
-                <div style={{ display: 'inline' }}>
-                    <Link
-                        to={'/accounts/profile/' + username}
-                        style={{ color: 'black', fontWeight: '500' }}
-                    >
-                        <span>{username}</span>
-                    </Link>
-                </div>
-                <div style={{ display: 'inline', marginLeft: '0.5rem' }}>
-                    <span style={{ color: 'black', opacity: '0.85' }}>
-                        <span>{caption}</span>
-                    </span>
-                </div>
-            </div>
-
-            {commentList &&
-                commentList.map((comment) => {
-                    return (
-                        <div key={comment.id}>
-                            <div style={{ display: 'inline' }}>
-                                <Link
-                                    to={'/accounts/profile/' + username}
-                                    style={{
-                                        color: 'black',
-                                        fontWeight: '500',
-                                    }}
-                                >
-                                    <span>{comment.author.username}</span>
-                                </Link>
-                            </div>
+                }
+                bodyStyle={{
+                    paddingTop: '3px',
+                    paddingBottom: '0px',
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
+                }}
+            >
+                <Row>
+                    <Col span={2}>
+                        <div onClick={handleClcik}>
+                            {isLike ? <HeartFilled /> : <Heart />}
+                        </div>
+                    </Col>
+                    <Col span={22} style={{ textAlign: 'right' }}>
+                        {myUser.pk === author.pk && (
                             <div
                                 style={{
                                     display: 'inline',
-                                    marginLeft: '0.5rem',
+                                    float: 'right',
+                                    marginTop: 'auto',
+                                    marginBottom: 'auto',
                                 }}
                             >
-                                <span
+                                <DeleteOutlined
+                                    style={{ fontSize: '17px' }}
+                                    onClick={() => {
+                                        setPostDeleteModalVisible(true);
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </Col>
+                </Row>
+
+                <div>
+                    <div style={{ display: 'inline' }}>
+                        <Link
+                            to={'/accounts/profile/' + username}
+                            style={{ color: 'black', fontWeight: '500' }}
+                        >
+                            <span>{username}</span>
+                        </Link>
+                    </div>
+                    <div style={{ display: 'inline', marginLeft: '0.5rem' }}>
+                        <span style={{ color: 'black', opacity: '0.85' }}>
+                            <span>{caption}</span>
+                        </span>
+                    </div>
+                </div>
+
+                {commentList &&
+                    commentList.map((comment) => {
+                        return (
+                            <div key={comment.id}>
+                                <div style={{ display: 'inline' }}>
+                                    <Link
+                                        to={'/accounts/profile/' + username}
+                                        style={{
+                                            color: 'black',
+                                            fontWeight: '500',
+                                        }}
+                                    >
+                                        <span>{comment.author.username}</span>
+                                    </Link>
+                                </div>
+                                <div
                                     style={{
-                                        color: 'black',
-                                        opacity: '0.85',
+                                        display: 'inline',
+                                        marginLeft: '0.5rem',
                                     }}
                                 >
-                                    <span>{comment.message}</span>
-                                </span>
+                                    <span
+                                        style={{
+                                            color: 'black',
+                                            opacity: '0.85',
+                                        }}
+                                    >
+                                        <span>{comment.message}</span>
+                                    </span>
+                                </div>
+                                {myUser.pk === comment.author.pk && (
+                                    <div
+                                        style={{
+                                            display: 'inline',
+                                            float: 'right',
+                                        }}
+                                    >
+                                        <DeleteOutlined
+                                            style={{ fontSize: '12px' }}
+                                            onClick={() => {
+                                                Axios.delete(
+                                                    defaultUrl +
+                                                        `/api/posts/${pk}/comments/${comment.id}/`,
+                                                    { headers },
+                                                ).then(() => {
+                                                    refetch();
+                                                });
+                                            }}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                        </div>
-                    );
-                })}
-            <hr style={{ opacity: '0.5' }} />
-            <Comment postPk={pk} refetch={refetch} />
-        </Card>
+                        );
+                    })}
+                <hr style={{ opacity: '0.5' }} />
+                <Comment postPk={pk} refetch={refetch} />
+            </Card>
+            <Modal
+                title="포스팅 삭제"
+                visible={postDeleteModalVisible}
+                footer={null}
+                onCancel={() => {
+                    setPostDeleteModalVisible(false);
+                }}
+            >
+                <p>포스팅을 삭제 하시겠습니까?</p>
+                <Button
+                    onClick={() => {
+                        Axios.delete(defaultUrl + `/api/posts/${pk}/`, {
+                            headers,
+                        }).then(() => {
+                            window.location.replace('/');
+                        });
+                    }}
+                >
+                    예
+                </Button>
+                <Button
+                    style={{ marginLeft: '0.3rem' }}
+                    onClick={() => {
+                        setPostDeleteModalVisible(false);
+                    }}
+                >
+                    아니요
+                </Button>
+            </Modal>
+        </>
     );
 };
 
