@@ -9,6 +9,7 @@ import { Row, Col, Button, Modal } from 'antd';
 import { useMyUserContext } from '../../utils/MyUserProvider';
 import UserList from '../../components/UserList';
 import EditProfileLogo from '../../components/EditProfileLogo';
+import '../../utils/hover.scss';
 
 const Profile = ({ location }) => {
     const defaultUrl = useUrlContext().defaulturl;
@@ -229,7 +230,9 @@ const Profile = ({ location }) => {
                                         key={post.pk}
                                     >
                                         <div
+                                            className="grow"
                                             style={{
+                                                cursor: 'pointer',
                                                 marginBottom: '1.2rem',
                                             }}
                                         >

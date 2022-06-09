@@ -1,0 +1,48 @@
+$defaultDuration: 0.3s;
+$primaryColour: #ececec;
+$secondaryColour: #666;
+$shadowColour: rgba(0, 0, 0, 0.6);
+
+// As is often the case, some devices/browsers need additional code to get CSS to work
+// in the most desired way. These mixins are used to quickly drop in hacks for each element
+@mixin hideTapHighlightColor() {
+    //Prevent highlight colour when element is tapped
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+@mixin hardwareAccel() {
+    //Improve performance on mobile/tablet devices
+    transform: translateZ(0);
+}
+
+@mixin improveAntiAlias() {
+    //Improve aliasing on mobile/tablet devices
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+
+/* Default styles for the demo buttons */
+.button {
+    margin: 0.4em;
+    padding: 1em;
+    cursor: pointer;
+    background: $primaryColour;
+    text-decoration: none;
+    color: $secondaryColour;
+}
+
+/* 2D TRANSITIONS */
+
+/* Grow */
+.grow {
+    display: inline-block;
+    transition-duration: $defaultDuration;
+    transition-property: transform;
+
+    @include hideTapHighlightColor();
+    @include hardwareAccel();
+    @include improveAntiAlias();
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}

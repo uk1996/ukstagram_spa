@@ -47,7 +47,7 @@ const Post = ({ post }) => {
         <>
             <Card
                 className="post"
-                hoverable
+                // hoverable
                 cover={<img src={photo} alt={caption} />}
                 title={
                     <div>
@@ -79,7 +79,7 @@ const Post = ({ post }) => {
                 }}
             >
                 <Row>
-                    <Col span={2}>
+                    <Col span={2} style={{ cursor: 'pointer' }}>
                         <div onClick={handleClcik}>
                             {isLike ? <HeartFilled /> : <Heart />}
                         </div>
@@ -175,6 +175,9 @@ const Post = ({ post }) => {
                             </div>
                         );
                     })}
+                <span style={{ cursor: 'pointer', opacity: '0.5' }}>
+                    댓글 모두 보기
+                </span>
                 <hr style={{ opacity: '0.5' }} />
                 <Comment postPk={pk} refetch={refetch} />
             </Card>
