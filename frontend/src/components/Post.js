@@ -11,6 +11,7 @@ import Heart from './Heart';
 import HeartFilled from './HeartFilled';
 import Comment from './Comment';
 import { useMyUserContext } from '../utils/MyUserProvider';
+import PostDetail from './PostDetail';
 
 const Post = ({ post }) => {
     const { pk, author, photo, caption, is_like } = post;
@@ -24,6 +25,7 @@ const Post = ({ post }) => {
     const headers = { Authorization: `Bearer ${jwtToken}` };
     const { myUser } = useMyUserContext();
     const [postDeleteModalVisible, setPostDeleteModalVisible] = useState(false);
+    const [isDetailVisble, setDetailVisble] = useState(false);
 
     const [{ data: commentList }, refetch] = useAxios({
         url: defaultUrl + `/api/posts/${pk}/comments/`,
@@ -175,7 +177,12 @@ const Post = ({ post }) => {
                             </div>
                         );
                     })}
-                <span style={{ cursor: 'pointer', opacity: '0.5' }}>
+                <span
+                    style={{ cursor: 'pointer', opacity: '0.5' }}
+                    onClick={() => {
+                        setDetailVisble(true);
+                    }}
+                >
                     댓글 모두 보기
                 </span>
                 <hr style={{ opacity: '0.5' }} />
@@ -209,6 +216,22 @@ const Post = ({ post }) => {
                 >
                     아니요
                 </Button>
+            </Modal>
+            <Modal
+                visible={isDetailVisble}
+                footer={null}
+                onCancel={() => {
+                    setDetailVisble(false);
+                }}
+                bodyStyle={{ padding: '0px' }}
+                width="80%"
+            >
+                <PostDetail
+                    photo={photo}
+                    caption={caption}
+                    author={author}
+                    is_like={is_like}
+                />
             </Modal>
         </>
     );
