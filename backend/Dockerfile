@@ -1,6 +1,4 @@
-# FROM ubuntu:20.04
 FROM python:3.8.13-slim-buster
-# RUN apt update && apt install -y python3.8
 WORKDIR /ukstagram/backend
 COPY . .
 RUN pip install --upgrade pip
