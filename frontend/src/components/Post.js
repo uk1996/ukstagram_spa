@@ -28,7 +28,7 @@ const Post = ({ post }) => {
     const [isDetailVisble, setDetailVisble] = useState(false);
 
     const [{ data: commentList }, refetch] = useAxios({
-        url: defaultUrl + `/api/posts/${pk}/comments/`,
+        url: defaultUrl + `/api/posts/${pk}/comments/?count=2`,
         headers,
     });
 
@@ -202,7 +202,7 @@ const Post = ({ post }) => {
                         Axios.delete(defaultUrl + `/api/posts/${pk}/`, {
                             headers,
                         }).then(() => {
-                            window.location.replace('/');
+                            window.location.reload();
                         });
                     }}
                 >
@@ -227,10 +227,14 @@ const Post = ({ post }) => {
                 width="80%"
             >
                 <PostDetail
+                    pk={pk}
                     photo={photo}
                     caption={caption}
                     author={author}
                     is_like={is_like}
+                    myUser={myUser}
+                    setPostDeleteModalVisible={setPostDeleteModalVisible}
+                    setDetailVisble={setDetailVisble}
                 />
             </Modal>
         </>

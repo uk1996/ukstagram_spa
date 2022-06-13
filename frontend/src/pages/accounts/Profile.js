@@ -10,6 +10,7 @@ import { useMyUserContext } from '../../utils/MyUserProvider';
 import UserList from '../../components/UserList';
 import EditProfileLogo from '../../components/EditProfileLogo';
 import '../../utils/hover.scss';
+import PostDetail from '../../components/PostDetail';
 
 const Profile = ({ location }) => {
     const defaultUrl = useUrlContext().defaulturl;
@@ -19,6 +20,7 @@ const Profile = ({ location }) => {
     const {
         store: { jwtToken },
     } = useAppContext();
+    const headers = { Authorization: `Bearer ${jwtToken}` };
     const [username, setUserName] = useState();
     const [user, setUser] = useState();
     const [isFollow, setIsFollow] = useState();
@@ -26,6 +28,8 @@ const Profile = ({ location }) => {
     const [postList, setPostList] = useState();
     const [buttonKinds, setButtonKinds] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isDetailVisble, setDetailVisble] = useState(false);
+    const [postDeleteModalVisible, setPostDeleteModalVisible] = useState(false);
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -224,25 +228,93 @@ const Profile = ({ location }) => {
                         <Row gutter={16}>
                             {postList.map((post) => {
                                 return (
-                                    <Col
-                                        className="gutter-row"
-                                        span={8}
-                                        key={post.pk}
-                                    >
-                                        <div
-                                            className="grow"
-                                            style={{
-                                                cursor: 'pointer',
-                                                marginBottom: '1.2rem',
+                                    <>
+                                        <Col
+                                            className="gutter-row"
+                                            span={8}
+                                            key={post.pk}
+                                        >
+                                            <div
+                                                onClick={() => {
+                                                    setDetailVisble(true);
+                                                }}
+                                                className="grow"
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    marginBottom: '1.2rem',
+                                                }}
+                                            >
+                                                <img
+                                                    style={{ width: '100%' }}
+                                                    src={post.photo}
+                                                    alt=""
+                                                />
+                                            </div>
+                                        </Col>
+                                        <Modal
+                                            visible={isDetailVisble}
+                                            footer={null}
+                                            onCancel={() => {
+                                                setDetailVisble(false);
+                                            }}
+                                            bodyStyle={{ padding: '0px' }}
+                                            width="80%"
+                                        >
+                                            <PostDetail
+                                                pk={post.pk}
+                                                photo={post.photo}
+                                                caption={post.caption}
+                                                author={post.author}
+                                                is_like={post.is_like}
+                                                myUser={myUser}
+                                                setPostDeleteModalVisible={
+                                                    setPostDeleteModalVisible
+                                                }
+                                                setDetailVisble={
+                                                    setDetailVisble
+                                                }
+                                            />
+                                        </Modal>
+                                        <Modal
+                                            title="포스팅 삭제"
+                                            visible={postDeleteModalVisible}
+                                            footer={null}
+                                            onCancel={() => {
+                                                setPostDeleteModalVisible(
+                                                    false,
+                                                );
                                             }}
                                         >
-                                            <img
-                                                style={{ width: '100%' }}
-                                                src={post.photo}
-                                                alt=""
-                                            />
-                                        </div>
-                                    </Col>
+                                            <p>포스팅을 삭제 하시겠습니까?</p>
+                                            <Button
+                                                onClick={() => {
+                                                    Axios.delete(
+                                                        defaultUrl +
+                                                            `/api/posts/${post.pk}/`,
+                                                        {
+                                                            headers,
+                                                        },
+                                                    ).then(() => {
+                                                        window.location.reload();
+                                                    });
+                                                }}
+                                            >
+                                                예
+                                            </Button>
+                                            <Button
+                                                style={{
+                                                    marginLeft: '0.3rem',
+                                                }}
+                                                onClick={() => {
+                                                    setPostDeleteModalVisible(
+                                                        false,
+                                                    );
+                                                }}
+                                            >
+                                                아니요
+                                            </Button>
+                                        </Modal>
+                                    </>
                                 );
                             })}
                         </Row>
