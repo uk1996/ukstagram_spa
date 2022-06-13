@@ -1,4 +1,4 @@
-FROM python:3.8.13-slim-buster
+FROM python:3.8.13-buster
 WORKDIR /ukstagram/backend
 COPY . .
 RUN pip install --upgrade pip
