@@ -226,14 +226,10 @@ const Profile = ({ location }) => {
                     <hr style={{ marginTop: '1.5rem', opacity: '0.7' }} />
                     <div className="postList">
                         <Row gutter={16}>
-                            {postList.map((post) => {
+                            {postList.map((post, idx) => {
                                 return (
-                                    <>
-                                        <Col
-                                            className="gutter-row"
-                                            span={8}
-                                            key={post.pk}
-                                        >
+                                    <React.Fragment key={post.pk}>
+                                        <Col className="gutter-row" span={8}>
                                             <div
                                                 onClick={() => {
                                                     setDetailVisble(true);
@@ -314,7 +310,7 @@ const Profile = ({ location }) => {
                                                 아니요
                                             </Button>
                                         </Modal>
-                                    </>
+                                    </React.Fragment>
                                 );
                             })}
                         </Row>
