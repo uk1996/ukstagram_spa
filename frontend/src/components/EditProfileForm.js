@@ -5,7 +5,7 @@ import { PlusOutlined, SmileOutlined } from '@ant-design/icons';
 import { getBase64FromFile } from '../utils/base64';
 import { useUrlContext } from '../utils/UrlProvider';
 import Axios from 'axios';
-import { useAppContext } from '../store';
+import { useAppContext, deleteToken } from '../store';
 import { parseErrorMessage } from '../utils/forms';
 import PasswordChangeForm from './PasswordChangeForm';
 
@@ -20,13 +20,21 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
     const [fileList, setFileList] = useState([]);
     const {
         store: { jwtToken },
+        dispatch,
     } = useAppContext();
+    const headers = { Authorization: `Bearer ${jwtToken}` };
     const [showPasswordChangeModal, setShowPasswordChangeModal] =
         useState(false);
+    const [deleteAccountModal, setDeleteAccountModal] = useState(false);
 
     const PasswordChangeClick = () => {
         setIsModalVisible(false);
         setShowPasswordChangeModal(true);
+    };
+
+    const deleteAccountClick = () => {
+        setIsModalVisible(false);
+        setDeleteAccountModal(true);
     };
 
     useEffect(() => {
@@ -54,8 +62,6 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
         } = fieldValues;
 
         console.log(fieldValues);
-
-        const headers = { Authorization: `Bearer ${jwtToken}` };
 
         const formData = new FormData();
         formData.append('introduction', introduction);
@@ -236,6 +242,17 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
                 >
                     비밀번호 변경
                 </Button>
+                <Button
+                    type="primary"
+                    danger
+                    style={{
+                        marginLeft: '0.5rem',
+                        color: 'white',
+                    }}
+                    onClick={deleteAccountClick}
+                >
+                    회원 탈퇴
+                </Button>
             </Form.Item>
 
             <Modal
@@ -259,6 +276,37 @@ const EditProfileForm = ({ setIsModalVisible, requestUerPage }) => {
                 <PasswordChangeForm
                     setShowPasswordChangeModal={setShowPasswordChangeModal}
                 />
+            </Modal>
+
+            <Modal
+                title="회원 탈퇴"
+                visible={deleteAccountModal}
+                footer={null}
+                onCancel={() => setDeleteAccountModal(false)}
+            >
+                <div>
+                    <p>정말로 탈퇴 하시겠습니까?</p>
+                </div>
+                <Button
+                    onClick={() => {
+                        Axios.delete(
+                            defaultUrl + `/accounts/users/${myUser.pk}/`,
+                            { headers },
+                        ).then(() => {
+                            dispatch(deleteToken());
+                        });
+                    }}
+                >
+                    예
+                </Button>
+                <Button
+                    style={{ marginLeft: '0.3rem' }}
+                    onClick={() => {
+                        setDeleteAccountModal(false);
+                    }}
+                >
+                    아니요
+                </Button>
             </Modal>
         </Form>
     );
