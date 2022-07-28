@@ -40,7 +40,10 @@ const UserSearch = () => {
                                         icon={
                                             <img
                                                 src={
-                                                    defaultUrl + user.avatar_url
+                                                    user.avatar
+                                                        ? user.avatar
+                                                        : defaultUrl +
+                                                          user.avatar_url
                                                 }
                                                 alt=""
                                             />
