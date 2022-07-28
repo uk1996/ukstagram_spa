@@ -6,7 +6,7 @@ import { useUrlContext } from '../utils/UrlProvider';
 import Axios from 'axios';
 import { useAppContext } from '../store';
 
-const User = ({ user: { username, avatar_url }, requestUerPage }) => {
+const User = ({ user: { username, avatar, avatar_url }, requestUerPage }) => {
     const { myUser, setMyUser } = useMyUserContext();
     const [isFollow, setIsFollow] = useState();
     const defaultUrl = useUrlContext().defaulturl;
@@ -51,7 +51,16 @@ const User = ({ user: { username, avatar_url }, requestUerPage }) => {
                     <Link to={`/accounts/profile/${username}`}>
                         <Avatar
                             size="small"
-                            icon={<img src={defaultUrl + avatar_url} alt="" />}
+                            icon={
+                                <img
+                                    src={
+                                        avatar
+                                            ? avatar
+                                            : defaultUrl + avatar_url
+                                    }
+                                    alt=""
+                                />
+                            }
                         />
                     </Link>
                 </Col>

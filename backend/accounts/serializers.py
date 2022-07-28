@@ -9,7 +9,7 @@ User = get_user_model()
 class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["pk", "username", "avatar_url"]
+        fields = ["pk", "username", "avatar", "avatar_url"]
 
 
 class UserSerializer(serializers.ModelSerializer):
