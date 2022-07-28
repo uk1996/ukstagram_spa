@@ -19,10 +19,11 @@ const PostDetail = ({
     myUser,
     setPostDeleteModalVisible,
 }) => {
-    const { username, avatar_url } = author;
-    const avatarUrl = useUrlContext().defaulturl + avatar_url;
-    const [isLike, setIsLike] = useState(is_like);
+    const { username, avatar, avatar_url } = author;
     const defaultUrl = useUrlContext().defaulturl;
+    const avatarUrl = avatar ? avatar : defaultUrl + avatar_url;
+    const [isLike, setIsLike] = useState(is_like);
+
     const {
         store: { jwtToken },
     } = useAppContext();
