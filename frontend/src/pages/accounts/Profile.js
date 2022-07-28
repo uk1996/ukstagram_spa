@@ -331,6 +331,7 @@ const Profile = ({ location }) => {
                                 requestUerPage={requestUerPage}
                                 userList={user.following_set}
                                 kind="following"
+                                setUserListModalVisible={setIsModalVisible}
                             />
                         </Modal>
                     ) : (
@@ -345,6 +346,7 @@ const Profile = ({ location }) => {
                                 requestUerPage={requestUerPage}
                                 userList={user.follower_set}
                                 kind="follower"
+                                setUserListModalVisible={setIsModalVisible}
                             />
                         </Modal>
                     )}

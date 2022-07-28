@@ -1,7 +1,12 @@
 import React from 'react';
 import User from './User';
 
-const UserList = ({ userList, kind, requestUerPage }) => {
+const UserList = ({
+    userList,
+    kind,
+    requestUerPage,
+    setUserListModalVisible,
+}) => {
     return (
         <>
             <div>
@@ -20,6 +25,7 @@ const UserList = ({ userList, kind, requestUerPage }) => {
                             key={user.pk}
                             user={user}
                             requestUerPage={requestUerPage}
+                            setUserListModalVisible={setUserListModalVisible}
                         />
                     );
                 })}

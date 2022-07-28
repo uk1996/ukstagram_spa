@@ -6,7 +6,11 @@ import { useUrlContext } from '../utils/UrlProvider';
 import Axios from 'axios';
 import { useAppContext } from '../store';
 
-const User = ({ user: { username, avatar, avatar_url }, requestUerPage }) => {
+const User = ({
+    user: { username, avatar, avatar_url },
+    requestUerPage,
+    setUserListModalVisible,
+}) => {
     const { myUser, setMyUser } = useMyUserContext();
     const [isFollow, setIsFollow] = useState();
     const defaultUrl = useUrlContext().defaulturl;
@@ -47,7 +51,12 @@ const User = ({ user: { username, avatar, avatar_url }, requestUerPage }) => {
     return (
         <div style={{ marginBottom: '2%' }}>
             <Row>
-                <Col span={2}>
+                <Col
+                    span={2}
+                    onClick={() => {
+                        setUserListModalVisible(false);
+                    }}
+                >
                     <Link to={`/accounts/profile/${username}`}>
                         <Avatar
                             size="small"
@@ -64,7 +73,12 @@ const User = ({ user: { username, avatar, avatar_url }, requestUerPage }) => {
                         />
                     </Link>
                 </Col>
-                <Col span={11}>
+                <Col
+                    span={11}
+                    onClick={() => {
+                        setUserListModalVisible(false);
+                    }}
+                >
                     <Link to={`/accounts/profile/${username}`}>
                         <span
                             style={{
