@@ -8,7 +8,7 @@ User = get_user_model()
 class AuthSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["pk", "username", "name", "avatar_url"]
+        fields = ["pk", "username", "name", "avatar", "avatar_url"]
 
 
 # class LikeUserSerializer(serializers.ModelSerializer):

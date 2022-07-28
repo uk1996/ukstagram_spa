@@ -7,9 +7,9 @@ import { useAppContext } from '../store';
 import Axios from 'axios';
 import { useMyUserContext } from '../utils/MyUserProvider';
 
-const Suggestion = ({ username, avatar_url, is_follow }) => {
+const Suggestion = ({ username, avatar, avatar_url, is_follow }) => {
     const defaultUrl = useUrlContext().defaulturl;
-    const imgUrl = defaultUrl + avatar_url;
+    const imgUrl = avatar ? avatar_url : defaultUrl + avatar_url;
     const [isFollow, setIsFollow] = useState(false);
     const {
         store: { jwtToken },

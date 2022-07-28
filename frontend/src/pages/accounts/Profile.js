@@ -112,7 +112,11 @@ const Profile = ({ location }) => {
                         <Col className="gutter-row" span={8}>
                             <UserAvatar
                                 divposition={{ left: '35%' }}
-                                avatarUrl={defaultUrl + user.avatar_url}
+                                avatarUrl={
+                                    user.avatar
+                                        ? user.avatar_url
+                                        : defaultUrl + user.avatar_url
+                                }
                             />
                         </Col>
                         <Col className="gutter-row" span={16}>

@@ -4,7 +4,9 @@ const UrlContext = createContext();
 
 const UrlProvider = ({ children }) => {
     return (
-        <UrlContext.Provider value={{ defaulturl: 'http://localhost:8000' }}>
+        <UrlContext.Provider
+            value={{ defaulturl: process.env.REACT_APP_API_HOST }}
+        >
             {children}
         </UrlContext.Provider>
     );

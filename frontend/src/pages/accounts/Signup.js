@@ -5,10 +5,12 @@ import { Card, Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
 import { deleteToken, useAppContext } from '../../store';
 import AppLayout from '../../components/AppLayout';
-
-const apiUrl = 'http://localhost:8000/accounts/signup/';
+import { useUrlContext } from '../../utils/UrlProvider';
 
 const Signup = () => {
+    const defaultUrl = useUrlContext().defaulturl;
+    const apiUrl = defaultUrl + '/accounts/signup/';
+
     const history = useHistory();
 
     const [fieldErrors, setFieldErrors] = useState({});

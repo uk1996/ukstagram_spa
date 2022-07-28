@@ -6,13 +6,11 @@ import { useMyUserContext } from '../utils/MyUserProvider';
 const MyImage = ({ size }) => {
     const { myUser } = useMyUserContext();
     const defaulturl = useUrlContext().defaulturl;
+    const avatar_url = myUser.avatar
+        ? myUser.avatar_url
+        : defaulturl + myUser.avatar_url;
 
-    return (
-        <Avatar
-            size={size}
-            icon={<img src={defaulturl + myUser.avatar_url} alt="" />}
-        />
-    );
+    return <Avatar size={size} icon={<img src={avatar_url} alt="" />} />;
 };
 
 export default MyImage;

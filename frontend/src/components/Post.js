@@ -15,13 +15,13 @@ import PostDetail from './PostDetail';
 
 const Post = ({ post }) => {
     const { pk, author, photo, caption, is_like } = post;
-    const { username, avatar_url } = author;
-    const avatarUrl = useUrlContext().defaulturl + avatar_url;
+    const { username, avatar, avatar_url } = author;
+    const defaultUrl = useUrlContext().defaulturl;
+    const avatarUrl = avatar ? avatar : defaultUrl + avatar_url;
     const [isLike, setIsLike] = useState(is_like);
     const {
         store: { jwtToken },
     } = useAppContext();
-    const defaultUrl = useUrlContext().defaulturl;
     const headers = { Authorization: `Bearer ${jwtToken}` };
     const { myUser } = useMyUserContext();
     const [postDeleteModalVisible, setPostDeleteModalVisible] = useState(false);
